@@ -1,31 +1,53 @@
 package bowden.scheduleapp.Controller;
 
 import bowden.scheduleapp.Main.Main;
+import bowden.scheduleapp.Model.Customers;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static bowden.scheduleapp.Helper.JDBC.openConnection;
+
 public class MainMenu implements Initializable {
+    @FXML
+    private TableColumn<Customers, String> colCustomerAddress;
+    @FXML
+    private TableColumn<Customers, Integer> colCustomerID;
+
+    @FXML
+    private TableColumn<Customers, String> colCustomerName;
+
+    @FXML
+    private TableColumn<Customers, String> colCustomerPhone;
+
+    @FXML
+    private TableColumn<Customers, String> colCustomerPostal;
+
+    @FXML
+    private TableColumn<Customers, String> colCustomerState;
+
+    @FXML
+    private TableView<?> customerTable;
+
     @FXML
     private Button btnLogout;
     @FXML
     private Button btnQuit;
     @FXML
     private Button btnAddAppointment;
-
     @FXML
     private Button btnAddCustomer;
 
@@ -49,6 +71,12 @@ public class MainMenu implements Initializable {
 
     @FXML
     private RadioButton rbuttonViewWeek;
+
+    public ObservableList<Customers> getCustomerList(){
+        ObservableList<Customers> customerList = FXCollections.observableArrayList();
+        Connection conn = openConnection();
+        String query = "SELECT * FROM customers";
+    }
 
     @FXML
     void addAppointment(ActionEvent event) throws IOException {

@@ -1,5 +1,6 @@
 package bowden.scheduleapp.Main;
 
+import bowden.scheduleapp.Helper.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,8 +19,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
-        /*JDBC.openConnection();
-        JDBC.closeConnection();*/
+        //launch();
+        JDBC.openConnection();
+        JDBC.closeConnection();
     }
 }
