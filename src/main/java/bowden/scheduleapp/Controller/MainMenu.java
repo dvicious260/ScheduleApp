@@ -4,6 +4,7 @@ import bowden.scheduleapp.Main.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,8 +12,14 @@ import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainMenu {
+public class MainMenu implements Initializable {
+    @FXML
+    private Button btnLogout;
+    @FXML
+    private Button btnQuit;
     @FXML
     private Button btnAddAppointment;
 
@@ -59,6 +66,14 @@ public class MainMenu {
     void deleteAppointment(ActionEvent event) {
 
     }
+    @FXML
+    void logout(ActionEvent event) {
+
+    }
+    @FXML
+    void quit(ActionEvent event) {
+
+    }
 
     @FXML
     void deleteCustomer(ActionEvent event) {
@@ -71,8 +86,12 @@ public class MainMenu {
     }
 
     @FXML
-    void modifyCustomer(ActionEvent event) {
-
+    void modifyCustomer(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/modifyCustomer.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
@@ -88,5 +107,10 @@ public class MainMenu {
     @FXML
     void viewWeek(ActionEvent event) {
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        rbuttonViewAll.setSelected(true);
     }
 }

@@ -43,7 +43,7 @@ public class AddCustomer implements Initializable {
     private Button newCustomerSave;
 
     @FXML
-    public static void cancelAdd(ActionEvent event) throws IOException {
+    void cancelAdd(ActionEvent event) throws IOException {
         home(event);
     }
 
