@@ -1,14 +1,28 @@
 package bowden.scheduleapp.Controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
-public class ModifyAppointment {
-    @FXML
-    private Label welcomeText;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
+import static bowden.scheduleapp.Helper.Methods.home;
+
+public class ModifyAppointment implements Initializable {
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    private TextField appointmentID;
+    @FXML
+    void cancel(ActionEvent event) throws IOException{
+        home(event);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        appointmentID.setDisable(true);
+        appointmentID.setText("Auto Generated");
     }
 }

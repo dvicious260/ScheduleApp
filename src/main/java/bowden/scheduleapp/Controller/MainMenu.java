@@ -7,12 +7,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainMenu implements Initializable {
@@ -48,7 +51,12 @@ public class MainMenu implements Initializable {
     private RadioButton rbuttonViewWeek;
 
     @FXML
-    void addAppointment(ActionEvent event) {
+    void addAppointment(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/addAppointment.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
 
     }
 
@@ -72,7 +80,14 @@ public class MainMenu implements Initializable {
     }
     @FXML
     void quit(ActionEvent event) {
-
+        Alert quitAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        quitAlert.setTitle("Quit Application");
+        quitAlert.setContentText("Are you sure you want to quit?");
+        Optional<ButtonType> result = quitAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+        }
     }
 
     @FXML
@@ -81,8 +96,12 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    void modifyAppointment(ActionEvent event) {
-
+    void modifyAppointment(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/modifyAppointment.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
