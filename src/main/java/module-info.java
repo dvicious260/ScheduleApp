@@ -1,6 +1,7 @@
 module bowden.scheduleapp.scheduleapp {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     /*opens bowden.scheduleapp to javafx.fxml;

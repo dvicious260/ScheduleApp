@@ -1,16 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="bowden.scheduleapp.Controller.MainMenu">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowden.scheduleapp.Controller.MainMenu">
+   <children>
+      <VBox layoutX="8.0" layoutY="10.0" prefHeight="584.0" prefWidth="884.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="884.0">
+               <children>
+                  <Label prefHeight="62.0" prefWidth="143.0" text="Appointments">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
+                  <RadioButton mnemonicParsing="false" text="View All">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="View by Month">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="View by Week" />
+               </children>
+            </HBox>
+            <TableView prefHeight="176.0" prefWidth="884.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Appointment_ID" />
+                <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+              </columns>
+            </TableView>
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="btnAddAppointment" mnemonicParsing="false" onAction="#addAppointment" text="Add Appointment">
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnModifyAppointment" mnemonicParsing="false" onAction="#modifyAppointment" text="Modify Appointment">
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnDeleteAppointment" mnemonicParsing="false" onAction="#deleteAppointment" text="Delete Appointment">
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="884.0">
+               <children>
+                  <Label prefHeight="62.0" prefWidth="143.0" text="Customers">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="23.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rbuttonViewAll" mnemonicParsing="false" onAction="#viewAll" text="View All">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="rbuttonViewMonth" mnemonicParsing="false" onAction="#viewMonth" text="View by Month">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="rbuttonViewWeek" mnemonicParsing="false" onAction="#viewWeek" text="View by Week" />
+               </children>
+            </HBox>
+            <TableView prefHeight="176.0" prefWidth="884.0">
+               <columns>
+                  <TableColumn prefWidth="75.0" text="C1" />
+                  <TableColumn prefWidth="75.0" text="C2" />
+               </columns>
+            </TableView>
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="btnAddCustomer" mnemonicParsing="false" onAction="#addCustomer" text="Add Customer">
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnModifyCustomer" mnemonicParsing="false" onAction="#modifyCustomer" text="Modify Customer">
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnDeleteCustomer" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer">
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

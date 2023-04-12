@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.0" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="30.0" layoutY="30.0" text="Customer Name:" />
+        <TextField layoutX="150.0" layoutY="30.0" promptText="Enter customer name" />
+
+        <Label layoutX="30.0" layoutY="70.0" text="Address:" />
+        <TextField layoutX="150.0" layoutY="70.0" promptText="Enter address" />
+
+        <Label layoutX="30.0" layoutY="110.0" text="Postal Code:" />
+        <TextField layoutX="150.0" layoutY="110.0" promptText="Enter postal code" />
+
+        <Label layoutX="30.0" layoutY="150.0" text="Phone Number:" />
+        <TextField layoutX="150.0" layoutY="150.0" promptText="Enter phone number" />
+
+        <Label layoutX="30.0" layoutY="190.0" text="Country:" />
+        <ComboBox layoutX="150.0" layoutY="190.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="USA" />
+                    <String fx:value="Canada" />
+                    <String fx:value="UK" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <Label layoutX="30.0" layoutY="230.0" text="State/Province:" />
+        <ComboBox layoutX="150.0" layoutY="230.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="New York" />
+                    <String fx:value="California" />
+                    <String fx:value="Ontario" />
+                    <String fx:value="Quebec" />
+                    <String fx:value="England" />
+                    <String fx:value="Scotland" />
+                </FXCollections>
+            </items>
+        </ComboBox>
+
+        <Button layoutX="30.0" layoutY="300.0" text="Add Customer" />
+    </children>
+</AnchorPane>

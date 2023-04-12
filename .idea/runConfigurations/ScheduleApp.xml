@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ScheduleApp" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="bowden.scheduleapp.Main.HelloApplication" />
+    <option name="MAIN_CLASS_NAME" value="bowden.scheduleapp.Main.Main" />
     <module name="ScheduleApp" />
     <method v="2">
       <option name="Make" enabled="true" />
