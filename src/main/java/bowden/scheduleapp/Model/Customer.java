@@ -1,6 +1,6 @@
 package bowden.scheduleapp.Model;
 
-public class Customers {
+public class Customer {
     int id;
     String name;
     String address;
@@ -9,7 +9,7 @@ public class Customers {
     int divisionID;
     String divisionName;
 
-    public Customers(int id, String name, String address, String postalCode, String phone, int divisionID, String divisionName) {
+    public Customer(int id, String name, String address, String postalCode, String phone, int divisionID, String divisionName) {
         this.id = id;
         this.name = name;
         this.address = address;

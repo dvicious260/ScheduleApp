@@ -6,8 +6,8 @@ module bowden.scheduleapp.scheduleapp {
 
     /*opens bowden.scheduleapp to javafx.fxml;
     exports bowden.scheduleapp;*/
-    /*exports bowden.scheduleapp.Model;
-    opens bowden.scheduleapp.Model to javafx.fxml;*/
+    exports bowden.scheduleapp.Model;
+    opens bowden.scheduleapp.Model to javafx.fxml;
     exports bowden.scheduleapp.Controller;
     opens bowden.scheduleapp.Controller to javafx.fxml;
     exports bowden.scheduleapp.Main;

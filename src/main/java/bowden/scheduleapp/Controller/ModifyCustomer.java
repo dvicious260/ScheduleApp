@@ -1,8 +1,10 @@
 package bowden.scheduleapp.Controller;
 
 import bowden.scheduleapp.Helper.Methods;
+import bowden.scheduleapp.Model.Customer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -46,6 +48,14 @@ public class ModifyCustomer implements Initializable {
 
     @FXML
     void saveCustomer(ActionEvent event) {
+
+    }
+    public void sendCustomer(Customer customer) {
+        modifyCustomerName.setText(customer.getName());
+        modifyCustomerID.setText("Auto generated: " + customer.getId());
+        modifyCustomerAddress.setText(customer.getAddress());
+        modifyCustomerPhone.setText(customer.getPhone());
+
 
     }
 

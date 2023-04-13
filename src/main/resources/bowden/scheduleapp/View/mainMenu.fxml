@@ -87,10 +87,14 @@
                   </Label>
                </children>
             </HBox>
-            <TableView prefHeight="176.0" prefWidth="884.0">
+            <TableView fx:id="customerTable" prefHeight="176.0" prefWidth="884.0">
                <columns>
-                  <TableColumn prefWidth="75.0" text="C1" />
-                  <TableColumn prefWidth="75.0" text="C2" />
+                  <TableColumn fx:id="colCustomerID" prefWidth="71.34859275817871" text="ID" />
+                  <TableColumn fx:id="colCustomerName" prefWidth="153.6514129638672" text="Name" />
+                  <TableColumn fx:id="colCustomerAddress" minWidth="0.0" prefWidth="233.8029022216797" text="Address" />
+                  <TableColumn fx:id="colCustomerPhone" minWidth="0.0" prefWidth="190.69717407226562" text="Phone Number" />
+                  <TableColumn fx:id="colCustomerState" prefWidth="117.03158569335938" text="State" />
+                  <TableColumn fx:id="colCustomerPostal" prefWidth="118.1248779296875" text="Postal Code" />
                </columns>
             </TableView>
             <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0">

@@ -1,46 +1,45 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.CustomersDAO;
 import bowden.scheduleapp.Main.Main;
-import bowden.scheduleapp.Model.Customers;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import bowden.scheduleapp.Model.Customer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static bowden.scheduleapp.Helper.JDBC.openConnection;
-
 public class MainMenu implements Initializable {
     @FXML
-    private TableColumn<Customers, String> colCustomerAddress;
+    private TableColumn<Customer, String> colCustomerAddress;
     @FXML
-    private TableColumn<Customers, Integer> colCustomerID;
+    private TableColumn<Customer, Integer> colCustomerID;
 
     @FXML
-    private TableColumn<Customers, String> colCustomerName;
+    private TableColumn<Customer, String> colCustomerName;
 
     @FXML
-    private TableColumn<Customers, String> colCustomerPhone;
+    private TableColumn<Customer, String> colCustomerPhone;
 
     @FXML
-    private TableColumn<Customers, String> colCustomerPostal;
+    private TableColumn<Customer, String> colCustomerPostal;
 
     @FXML
-    private TableColumn<Customers, String> colCustomerState;
+    private TableColumn<Customer, String> colCustomerState;
 
     @FXML
-    private TableView<?> customerTable;
+    private TableView<Customer> customerTable;
 
     @FXML
     private Button btnLogout;
@@ -72,11 +71,7 @@ public class MainMenu implements Initializable {
     @FXML
     private RadioButton rbuttonViewWeek;
 
-    public ObservableList<Customers> getCustomerList(){
-        ObservableList<Customers> customerList = FXCollections.observableArrayList();
-        Connection conn = openConnection();
-        String query = "SELECT * FROM customers";
-    }
+
 
     @FXML
     void addAppointment(ActionEvent event) throws IOException {
@@ -134,10 +129,16 @@ public class MainMenu implements Initializable {
 
     @FXML
     void modifyCustomer(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/modifyCustomer.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyCustomer.fxml"));
+        fxmlLoader.load();
+
+        ModifyCustomer modifyCustomer = fxmlLoader.getController();
+        modifyCustomer.sendCustomer(customerTable.getSelectionModel().getSelectedItem());
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
+        Parent scene = fxmlLoader.getRoot();
+        stage.setScene(new Scene(scene));
         stage.show();
     }
 
@@ -158,6 +159,18 @@ public class MainMenu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         rbuttonViewAll.setSelected(true);
+        try {
+            customerTable.setItems(CustomersDAO.getAllCustomers());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colCustomerPostal.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        colCustomerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        colCustomerState.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
     }
 }
