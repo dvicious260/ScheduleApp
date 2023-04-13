@@ -8,7 +8,9 @@ public class Customer {
     String phone;
     int divisionID;
     String divisionName;
-
+    public Customer() {
+        // Blank constructor
+    }
     public Customer(int id, String name, String address, String postalCode, String phone, int divisionID, String divisionName) {
         this.id = id;
         this.name = name;

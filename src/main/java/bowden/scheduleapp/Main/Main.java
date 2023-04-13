@@ -1,12 +1,22 @@
 package bowden.scheduleapp.Main;
 
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.JDBC;
+import bowden.scheduleapp.Model.Customer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import static bowden.scheduleapp.DAO.CustomersDAOImpl.updateCustomer;
+import static bowden.scheduleapp.DAO.CustomersDAOImpl.insertCustomer;
+import static bowden.scheduleapp.DAO.CustomersDAOImpl.deleteCustomer;
+
+
+
 
 public class Main extends Application {
     @Override
@@ -18,7 +28,9 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        //JDBC.openConnection();
+
         launch();
         //JDBC.openConnection();
         //JDBC.closeConnection();
