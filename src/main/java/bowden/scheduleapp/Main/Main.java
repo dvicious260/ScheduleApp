@@ -4,6 +4,7 @@ import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Customer;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,6 +15,8 @@ import java.sql.SQLException;
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.updateCustomer;
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.insertCustomer;
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.deleteCustomer;
+import static bowden.scheduleapp.DAO.CustomersDAOImpl.getCustomer;
+
 
 
 
@@ -30,6 +33,7 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
         //JDBC.openConnection();
+
 
         launch();
         //JDBC.openConnection();

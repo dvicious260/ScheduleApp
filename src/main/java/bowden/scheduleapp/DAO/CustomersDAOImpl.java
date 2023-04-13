@@ -17,7 +17,7 @@ public class CustomersDAOImpl {
     public boolean deleteCustomer(int customerID){}
     public boolean getCustomer(int customerID){}*/
 
-    public ObservableList<Customer> getAllCustomers() {
+    public static ObservableList<Customer> getAllCustomers() {
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
         try {
 
@@ -35,7 +35,7 @@ public class CustomersDAOImpl {
                 int customerDivisionID = rs.getInt("Division_ID");
                 String customerDivisionName = rs.getString("Division");
 
-                Customer customer = new Customer(customerID, customerName, customerAddress, customerPostal, customerPhone, customerDivisionID, customerDivisionName);
+                Customer customer = new Customer(customerID, customerName, customerAddress, customerPostal, customerPhone, customerDivisionID);
                 allCustomers.add(customer);
             }
         }catch (SQLException throwables){
@@ -69,12 +69,29 @@ public class CustomersDAOImpl {
         ps.setString(4, customer.getPhone());
         ps.setInt(5, customer.getDivisionID());
         ps.setInt(6, customer.getId());
+
         int rowsUpdated = ps.executeUpdate();
+
         return rowsUpdated > 0;
     }
 
-    public void getCustomer() {
+    public static Customer getCustomer(int customerID) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerID);
+        ResultSet rs = ps.executeQuery();
 
+        if (rs.next()) {
+            int id = rs.getInt("Customer_ID");
+            String name = rs.getString("Customer_Name");
+            String address = rs.getString("Address");
+            String postalCode = rs.getString("Postal_Code");
+            String phone = rs.getString("Phone");
+            int divisionId = rs.getInt("Division_ID");
+            return new Customer(id, name, address, postalCode, phone, divisionId);
+        }
+
+        return null;
     }
 
     public static boolean deleteCustomer(int customerId) throws SQLException {
