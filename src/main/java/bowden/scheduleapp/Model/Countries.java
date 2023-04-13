@@ -2,9 +2,9 @@ package bowden.scheduleapp.Model;
 
 public class Countries {
     int countryID;
-    int countryName;
+    String countryName;
 
-    public Countries(int countryID, int countryName) {
+    public Countries(int countryID, String countryName) {
         this.countryID = countryID;
         this.countryName = countryName;
     }
@@ -17,11 +17,16 @@ public class Countries {
         this.countryID = countryID;
     }
 
-    public int getCountryName() {
+    public String getCountryName() {
         return countryName;
     }
 
-    public void setCountryName(int countryName) {
+    public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    @Override
+    public String toString() {
+        return countryName;
     }
 }

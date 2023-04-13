@@ -1,12 +1,16 @@
 package bowden.scheduleapp.Controller;
 
-import bowden.scheduleapp.Helper.Methods;
+import bowden.scheduleapp.Helper.CountryHelper;
+import bowden.scheduleapp.Helper.DivisionsHelper;
+
+import bowden.scheduleapp.Model.Countries;
+import bowden.scheduleapp.Model.FirstLevelDivisions;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -15,6 +19,7 @@ import java.util.ResourceBundle;
 
 import static bowden.scheduleapp.Helper.Methods.home;
 
+
 public class AddCustomer implements Initializable {
 
 
@@ -22,7 +27,10 @@ public class AddCustomer implements Initializable {
     private TextField newCustomerAddress;
 
     @FXML
-    private ComboBox<?> newCustomerCountry;
+    private TextField newCustomerPostal;
+
+    @FXML
+    private ComboBox<Countries> newCustomerCountry;
 
     @FXML
     private TextField newCustomerID;
@@ -34,7 +42,7 @@ public class AddCustomer implements Initializable {
     private TextField newCustomerPhone;
 
     @FXML
-    private ComboBox<?> newCustomerState;
+    private ComboBox<FirstLevelDivisions> newCustomerState;
 
     @FXML
     private Button newCustomerCancel;
@@ -49,6 +57,12 @@ public class AddCustomer implements Initializable {
 
     @FXML
     void saveCustomer(ActionEvent event) {
+        int id;
+        String customerName = newCustomerName.getText();
+        String customerPhone = newCustomerPhone.getText();
+        String customerAddress = newCustomerAddress.getText();
+        String customerPostal = newCustomerPostal.getText();
+
 
     }
 
@@ -56,6 +70,14 @@ public class AddCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         newCustomerID.setDisable(true);
         newCustomerID.setText("Auto Generated");
+// populate the country combo box
+        ObservableList<Countries> countries = CountryHelper.getAllCountries();
+        newCustomerCountry.setItems(countries);
 
+        // set up a listener for the country combo box to populate the division combo box
+        newCustomerCountry.getSelectionModel().selectedItemProperty().addListener((observableValue, oldCountry, newCountry) -> {
+            ObservableList<FirstLevelDivisions> divisions = DivisionsHelper.getDivisionsByCountryId(newCountry.getCountryID());
+            newCustomerState.setItems(divisions);
+        });
     }
 }

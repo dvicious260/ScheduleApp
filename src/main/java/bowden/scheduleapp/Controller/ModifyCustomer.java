@@ -21,6 +21,9 @@ public class ModifyCustomer implements Initializable {
     private TextField modifyCustomerAddress;
 
     @FXML
+    private TextField modifyCustomerPostal;
+
+    @FXML
     private Button modifyCustomerCancel;
 
     @FXML
