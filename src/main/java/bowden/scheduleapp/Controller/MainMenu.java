@@ -1,6 +1,6 @@
 package bowden.scheduleapp.Controller;
 
-import bowden.scheduleapp.DAO.CustomersDAO;
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Main.Main;
 import bowden.scheduleapp.Model.Customer;
 import javafx.event.ActionEvent;
@@ -160,12 +160,9 @@ public class MainMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        CustomersDAOImpl dao = new CustomersDAOImpl(); // Create an instance of the class
         rbuttonViewAll.setSelected(true);
-        try {
-            customerTable.setItems(CustomersDAO.getAllCustomers());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        customerTable.setItems(dao.getAllCustomers());
         colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
