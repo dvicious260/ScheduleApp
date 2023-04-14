@@ -68,7 +68,8 @@ public class CustomersDAOImpl {
         ps.setString(3, customer.getPostalCode());
         ps.setString(4, customer.getPhone());
         ps.setInt(5, customer.getDivisionID());
-        ps.setInt(6, customer.getId());
+        ps.setInt(6, customer.getDivisionID());
+        ps.setInt(7, customer.getId());
 
         int rowsUpdated = ps.executeUpdate();
 

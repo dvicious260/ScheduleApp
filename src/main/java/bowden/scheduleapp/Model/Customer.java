@@ -1,5 +1,10 @@
 package bowden.scheduleapp.Model;
 
+import bowden.scheduleapp.Helper.CountryHelper;
+import bowden.scheduleapp.Helper.DivisionsHelper;
+
+import java.sql.SQLException;
+
 public class Customer {
     int id;
     String name;
@@ -19,6 +24,12 @@ public class Customer {
         this.phone = phone;
         this.divisionID = divisionID;
         //this.divisionName = divisionName;
+    }
+    public Countries getCountry() throws SQLException {
+        return CountryHelper.getCountryById(this.getDivision().getCountryID());
+    }
+    public FirstLevelDivisions getDivision() throws SQLException {
+        return DivisionsHelper.getDivisionById(this.divisionID);
     }
 
     public int getId() {

@@ -31,4 +31,17 @@ public class CountryHelper {
         return countries;
     }
 
+    public static Countries getCountryById(int countryID) throws SQLException {
+        Connection conn = JDBC.openConnection();
+        String query = "SELECT * FROM countries WHERE Country_ID = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, countryID);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            String countryName = rs.getString("Country");
+            return new Countries(countryID, countryName);
+        }
+        return null;
+    }
+
 }
