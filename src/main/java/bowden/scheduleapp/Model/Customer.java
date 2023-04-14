@@ -2,6 +2,7 @@ package bowden.scheduleapp.Model;
 
 import bowden.scheduleapp.Helper.CountryHelper;
 import bowden.scheduleapp.Helper.DivisionsHelper;
+import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 
@@ -13,10 +14,13 @@ public class Customer {
     String phone;
     int divisionID;
     String divisionName;
+
+    private Countries country;
+    FirstLevelDivisions division;
     public Customer() {
         // Blank constructor
     }
-    public Customer(int id, String name, String address, String postalCode, String phone, int divisionID) {
+    public Customer(int id, String name, String address, String postalCode, String phone, int divisionID, FirstLevelDivisions division) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -26,8 +30,27 @@ public class Customer {
         //this.divisionName = divisionName;
     }
     public Countries getCountry() throws SQLException {
-        return CountryHelper.getCountryById(this.getDivision().getCountryID());
+        FirstLevelDivisions division = this.getDivision();
+        return CountryHelper.getCountryById(division.getCountryID());
     }
+
+    public void setCountry() throws SQLException {
+        if (this.getDivision() != null) {
+            int countryId = this.getDivision().getCountryID();
+            ObservableList<Countries> countries = CountryHelper.getAllCountries();
+            for (Countries country : countries) {
+                if (country.getCountryID() == countryId) {
+                    this.country = country;
+                    break;
+                }
+            }
+        }
+    }
+
+
+
+
+
     public FirstLevelDivisions getDivision() throws SQLException {
         return DivisionsHelper.getDivisionById(this.divisionID);
     }

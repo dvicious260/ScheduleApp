@@ -1,5 +1,6 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.CountryHelper;
 import bowden.scheduleapp.Helper.DivisionsHelper;
 import bowden.scheduleapp.Helper.Methods;
@@ -56,32 +57,79 @@ public class ModifyCustomer implements Initializable {
     }
 
     @FXML
-    void saveCustomer(ActionEvent event) {
+    void saveCustomer(ActionEvent event) throws IOException, SQLException {
+        String name = modifyCustomerName.getText();
+        int id = Integer.parseInt(modifyCustomerID.getText());
+        String address = modifyCustomerAddress.getText();
+        String postal = modifyCustomerPostal.getText();
+        String phone = modifyCustomerPhone.getText();
+        int divisionId = modifyCustomerState.getSelectionModel().getSelectedItem().getDivisionID();
 
+        // Get the existing customer record from the database
+        Customer existingCustomer = CustomersDAOImpl.getCustomer(id);
+        existingCustomer.setName(name);
+        existingCustomer.setAddress(address);
+        existingCustomer.setPostalCode(postal);
+        existingCustomer.setPhone(phone);
+        existingCustomer.setDivisionID(divisionId);
+
+        // Update the existing customer record with the new information
+        try {
+            CustomersDAOImpl.updateCustomer(existingCustomer);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Navigate back to the home screen
+        home(event);
     }
+
+
+    @FXML
     public void sendCustomer(Customer customer) throws SQLException {
         modifyCustomerName.setText(customer.getName());
-        modifyCustomerID.setText("Auto generated: " + customer.getId());
+        modifyCustomerID.setText(String.valueOf(customer.getId()));
         modifyCustomerAddress.setText(customer.getAddress());
         modifyCustomerPhone.setText(customer.getPhone());
         modifyCustomerPostal.setText(customer.getPostalCode());
+
         // populate the country combo box
         ObservableList<Countries> countries = CountryHelper.getAllCountries();
         modifyCustomerCountry.setItems(countries);
 
-        // set up a listener for the country combo box to populate the division combo box
+        // set the selected country
+        modifyCustomerCountry.setValue(customer.getCountry());
+
+        // set the selected country
         modifyCustomerCountry.getSelectionModel().selectedItemProperty().addListener((observableValue, oldCountry, newCountry) -> {
+            // Populate the divisions combo box based on the selected country
             ObservableList<FirstLevelDivisions> divisions = DivisionsHelper.getDivisionsByCountryId(newCountry.getCountryID());
             modifyCustomerState.setItems(divisions);
-        });
-        modifyCustomerCountry.setValue(customer.getCountry());
-        modifyCustomerState.setValue(customer.getDivision());
 
+            // If the customer has a division in the new country, select it in the divisions combo box
+            try {
+                if (customer.getCountry().equals(newCountry) && customer.getDivision() != null && divisions.contains(customer.getDivision())) {
+                    modifyCustomerState.setValue(customer.getDivision());
+                } else {
+                    modifyCustomerState.setValue(divisions.get(0));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        // populate the division combo box based on the selected country
+        ObservableList<FirstLevelDivisions> divisions = DivisionsHelper.getDivisionsByCountryId(customer.getCountry().getCountryID());
+        modifyCustomerState.setItems(divisions);
+
+        // set the selected division
+        modifyCustomerState.getSelectionModel().select(customer.getDivision());
     }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         modifyCustomerID.setDisable(true);
-        modifyCustomerID.setText("Auto Generated");
     }
 }

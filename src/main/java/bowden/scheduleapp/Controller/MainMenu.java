@@ -3,6 +3,8 @@ package bowden.scheduleapp.Controller;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Main.Main;
 import bowden.scheduleapp.Model.Customer;
+import bowden.scheduleapp.Model.FirstLevelDivisions;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -159,7 +161,6 @@ public class MainMenu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         CustomersDAOImpl dao = new CustomersDAOImpl(); // Create an instance of the class
         rbuttonViewAll.setSelected(true);
         customerTable.setItems(dao.getAllCustomers());
@@ -168,6 +169,21 @@ public class MainMenu implements Initializable {
         colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         colCustomerPostal.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         colCustomerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        colCustomerState.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
+        colCustomerState.setCellValueFactory(cellData -> {
+            SimpleStringProperty property = new SimpleStringProperty();
+            FirstLevelDivisions division = null;
+            try {
+                division = cellData.getValue().getDivision();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            if (division != null) {
+                property.setValue(division.getDivisionName());
+            } else {
+                property.setValue("");
+            }
+            return property;
+        });
     }
+
 }

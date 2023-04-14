@@ -1,5 +1,9 @@
 package bowden.scheduleapp.Model;
 
+import bowden.scheduleapp.Helper.CountryHelper;
+
+import java.sql.SQLException;
+
 public class FirstLevelDivisions {
 
     int divisionID;
@@ -38,5 +42,9 @@ public class FirstLevelDivisions {
     @Override
     public String toString(){
         return divisionName;
+    }
+
+    public Countries getCountry() throws SQLException {
+        return CountryHelper.getCountryById(this.getCountryID());
     }
 }

@@ -1,8 +1,10 @@
 package bowden.scheduleapp.DAO;
 
 import bowden.scheduleapp.Helper.DateTime;
+import bowden.scheduleapp.Helper.DivisionsHelper;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Customer;
+import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -33,9 +35,8 @@ public class CustomersDAOImpl {
                 String customerPostal = rs.getString("Postal_Code");
                 String customerPhone = rs.getString("Phone");
                 int customerDivisionID = rs.getInt("Division_ID");
-                String customerDivisionName = rs.getString("Division");
-
-                Customer customer = new Customer(customerID, customerName, customerAddress, customerPostal, customerPhone, customerDivisionID);
+                FirstLevelDivisions division = DivisionsHelper.getDivisionById(customerDivisionID);
+                Customer customer = new Customer(customerID, customerName, customerAddress, customerPostal, customerPhone, customerDivisionID, division);
                 allCustomers.add(customer);
             }
         }catch (SQLException throwables){
@@ -68,13 +69,13 @@ public class CustomersDAOImpl {
         ps.setString(3, customer.getPostalCode());
         ps.setString(4, customer.getPhone());
         ps.setInt(5, customer.getDivisionID());
-        ps.setInt(6, customer.getDivisionID());
-        ps.setInt(7, customer.getId());
+        ps.setInt(6, customer.getId());
 
         int rowsUpdated = ps.executeUpdate();
 
         return rowsUpdated > 0;
     }
+
 
     public static Customer getCustomer(int customerID) throws SQLException {
         String sql = "SELECT * FROM customers WHERE Customer_ID = ?";
@@ -89,11 +90,13 @@ public class CustomersDAOImpl {
             String postalCode = rs.getString("Postal_Code");
             String phone = rs.getString("Phone");
             int divisionId = rs.getInt("Division_ID");
-            return new Customer(id, name, address, postalCode, phone, divisionId);
+            FirstLevelDivisions division = DivisionsHelper.getDivisionById(divisionId);
+            return new Customer(id, name, address, postalCode, phone, divisionId, division);
         }
 
         return null;
     }
+
 
     public static boolean deleteCustomer(int customerId) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";

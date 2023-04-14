@@ -32,7 +32,32 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) throws SQLException {
-        //JDBC.openConnection();
+        JDBC.openConnection();
+        // Insert a new customer
+        //Customer customer = new Customer(4, "John Doe", "123 Main St", "12345", "555-1234", 1, null);
+        //boolean insertResult = CustomersDAOImpl.insertCustomer(customer);
+        //System.out.println("Insert result: " + insertResult);
+        // Update the customer
+        //customer.setName("Jane Doe");
+        //boolean updateResult = CustomersDAOImpl.updateCustomer(customer);
+        //System.out.println("Update result: " + updateResult);
+
+        //Customer retrievedCustomer = CustomersDAOImpl.getCustomer(4);
+        //System.out.println("Retrieved customer: " + retrievedCustomer.getName());
+
+        //boolean deleteResult = CustomersDAOImpl.deleteCustomer(4);
+        //System.out.println("Delete result: " + deleteResult);
+
+        // Insert customer 1
+        Customer customer1 = new Customer(4, "John Smith", "123 Main St", "12345", "555-1234", 1, null);
+
+
+        // Insert customer 2
+        Customer customer2 = new Customer(5, "Jane Doe", "456 Elm St", "67890", "555-5678", 2, null);
+
+
+        // Insert customer 3
+        Customer customer3 = new Customer(6, "Bob Johnson", "789 Oak St", "23456", "555-9012", 3, null);
 
 
         launch();

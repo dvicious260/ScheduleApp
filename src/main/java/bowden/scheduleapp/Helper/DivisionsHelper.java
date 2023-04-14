@@ -1,5 +1,6 @@
 package bowden.scheduleapp.Helper;
 
+import bowden.scheduleapp.Model.Countries;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
@@ -54,4 +55,10 @@ public class DivisionsHelper {
 
         return division;
     }
+    public static Countries getCountryByDivision(FirstLevelDivisions division) throws SQLException {
+        int countryId = division.getCountryID();
+        return CountryHelper.getCountryById(countryId);
+    }
+
+
 }
