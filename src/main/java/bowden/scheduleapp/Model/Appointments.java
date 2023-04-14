@@ -1,5 +1,7 @@
 package bowden.scheduleapp.Model;
 
+import java.time.LocalDateTime;
+
 public class Appointments {
     int appointmentID;
     String title;
@@ -9,13 +11,17 @@ public class Appointments {
     int customerID;
     int userID;
     int contactID;
+    LocalDateTime start;
+    LocalDateTime end;
 
-    public Appointments(int appointmentID, String title, String description, String location, String type, int customerID, int userID, int contactID) {
+    public Appointments(int appointmentID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
+        this.start = start;
+        this.end = end;
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;

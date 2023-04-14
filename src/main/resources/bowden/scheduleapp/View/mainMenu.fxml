@@ -39,18 +39,18 @@
                   <RadioButton fx:id="rbuttonViewWeek" mnemonicParsing="false" onAction="#viewWeek" text="View by Week" toggleGroup="$viewGroup" />
                </children>
             </HBox>
-            <TableView prefHeight="176.0" prefWidth="884.0">
+            <TableView fx:id="appointmentTable" prefHeight="176.0" prefWidth="884.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Appointment_ID" />
-                <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
-                  <TableColumn prefWidth="75.0" text="C2" />
+                <TableColumn fx:id="colAppID" prefWidth="47.9236478805542" text="ID" />
+                <TableColumn fx:id="colAppTitle" prefWidth="93.0176887512207" text="Title" />
+                  <TableColumn fx:id="colAppType" prefWidth="58.42364501953125" text="Type" />
+                  <TableColumn fx:id="colAppDesc" prefWidth="92.01773071289062" text="Description" />
+                  <TableColumn fx:id="colAppLoc" prefWidth="84.48226928710938" text="Location" />
+                  <TableColumn fx:id="colAppStart" prefWidth="120.041015625" text="Start" />
+                  <TableColumn fx:id="colAppEnd" prefWidth="101.458984375" text="End" />
+                  <TableColumn fx:id="colAppCustomerID" prefWidth="139.38262939453125" text="Customer ID" />
+                  <TableColumn fx:id="colAppUserID" prefWidth="84.87701416015625" text="User ID" />
+                  <TableColumn fx:id="colAppContactID" prefWidth="63.3946533203125" text="Contact ID" />
               </columns>
             </TableView>
             <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0">

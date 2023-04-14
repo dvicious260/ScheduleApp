@@ -1,7 +1,9 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Main.Main;
+import bowden.scheduleapp.Model.Appointments;
 import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,10 +21,42 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainMenu implements Initializable {
+    @FXML
+    private TableView<Appointments> appointmentTable;
+    @FXML
+    private TableColumn<Appointments, String> colAppContactID;
+
+    @FXML
+    private TableColumn<Appointments, Integer> colAppCustomerID;
+
+    @FXML
+    private TableColumn<Appointments, String> colAppDesc;
+
+    @FXML
+    private TableColumn<Appointments, LocalDateTime> colAppEnd;
+
+    @FXML
+    private TableColumn<Appointments, Integer> colAppID;
+
+    @FXML
+    private TableColumn<Appointments, String> colAppLoc;
+
+    @FXML
+    private TableColumn<Appointments, LocalDateTime> colAppStart;
+
+    @FXML
+    private TableColumn<Appointments, String> colAppTitle;
+
+    @FXML
+    private TableColumn<Appointments, String> colAppType;
+
+    @FXML
+    private TableColumn<Appointments, Integer> colAppUserID;
     @FXML
     private TableColumn<Customer, String> colCustomerAddress;
     @FXML
@@ -74,7 +108,6 @@ public class MainMenu implements Initializable {
     private RadioButton rbuttonViewWeek;
 
 
-
     @FXML
     void addAppointment(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/addAppointment.fxml"));
@@ -99,10 +132,12 @@ public class MainMenu implements Initializable {
     void deleteAppointment(ActionEvent event) {
 
     }
+
     @FXML
     void logout(ActionEvent event) {
 
     }
+
     @FXML
     void quit(ActionEvent event) {
         Alert quitAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -162,7 +197,6 @@ public class MainMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CustomersDAOImpl dao = new CustomersDAOImpl(); // Create an instance of the class
-        rbuttonViewAll.setSelected(true);
         customerTable.setItems(dao.getAllCustomers());
         colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -184,6 +218,21 @@ public class MainMenu implements Initializable {
             }
             return property;
         });
-    }
+        //Initialize appointments table
+        AppointmentsDaoImpl appDAO = new AppointmentsDaoImpl(); // Create an instance of the class
+        rbuttonViewAll.setSelected(true);
+        appointmentTable.setItems(appDAO.getAllAppointments());
+        colAppID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        colAppTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colAppDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colAppLoc.setCellValueFactory(new PropertyValueFactory<>("location"));
+        colAppType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        colAppStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        colAppEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        colAppCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        colAppUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        colAppContactID.setCellValueFactory(new PropertyValueFactory<>("contactID"));
 
+
+    }
 }
