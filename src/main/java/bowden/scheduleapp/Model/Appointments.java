@@ -30,6 +30,12 @@ public class Appointments {
     public int getAppointmentID() {
         return appointmentID;
     }
+    public LocalDateTime getStart(){
+        return start;
+    }
+    public LocalDateTime getEnd(){
+        return end;
+    }
 
     public void setAppointmentID(int appointmentID) {
         this.appointmentID = appointmentID;

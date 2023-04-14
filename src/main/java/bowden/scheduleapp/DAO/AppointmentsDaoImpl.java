@@ -34,6 +34,7 @@ public class AppointmentsDaoImpl {
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
                 Appointments appointment = new Appointments(appointmentID, title, description, location, type, start, end, customerID, userID, contactID);
+                //System.out.println(appointment.getStart());
                 allAppointments.add(appointment);
             }
         }catch (SQLException throwables){
