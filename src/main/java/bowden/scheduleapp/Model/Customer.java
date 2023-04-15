@@ -20,6 +20,10 @@ public class Customer {
     public Customer() {
         // Blank constructor
     }
+    @Override
+    public String toString(){
+        return String.valueOf(id);
+    }
     public Customer(int id, String name, String address, String postalCode, String phone, int divisionID, FirstLevelDivisions division) {
         this.id = id;
         this.name = name;

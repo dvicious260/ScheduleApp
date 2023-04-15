@@ -1,9 +1,13 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.ContactsHelper;
 import bowden.scheduleapp.Helper.DateTime;
+import bowden.scheduleapp.Helper.UserHelper;
 import bowden.scheduleapp.Model.Appointments;
 import bowden.scheduleapp.Model.Contacts;
+import bowden.scheduleapp.Model.Customer;
+import bowden.scheduleapp.Model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,7 +34,7 @@ public class ModifyAppointment implements Initializable {
     private ComboBox<Contacts> contactComboBox;
 
     @FXML
-    private ComboBox<?> customerComboBox;
+    private ComboBox<Customer> customerComboBox;
 
     @FXML
     private TextField descriptionTextField;
@@ -58,7 +62,7 @@ public class ModifyAppointment implements Initializable {
     private TextField typeTextField;
 
     @FXML
-    private ComboBox<?> userComboBox;
+    private ComboBox<Users> userComboBox;
     @FXML
     void cancel(ActionEvent event) throws IOException{
         home(event);
@@ -75,6 +79,10 @@ public class ModifyAppointment implements Initializable {
         startDatePicker.setValue(appointments.getStart().toLocalDate());
         startComboBox.setItems(DateTime.getBusinessHours());
         startComboBox.setValue(appointments.getStart().toLocalTime().minusHours(5));
+        endDatePicker.setValue(appointments.getEnd().toLocalDate());
+        customerComboBox.setItems(CustomersDAOImpl.getAllCustomers());
+        //customerComboBox.setValue(appointments.getCustomerID());
+        userComboBox.setItems(UserHelper.getAllUsers());
 
 
     }
