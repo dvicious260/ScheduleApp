@@ -157,10 +157,16 @@ public class MainMenu implements Initializable {
 
     @FXML
     void modifyAppointment(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/modifyAppointment.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyAppointment.fxml"));
+        fxmlLoader.load();
+
+        ModifyAppointment modifyAppointment = fxmlLoader.getController();
+        modifyAppointment.sendAppointment(appointmentTable.getSelectionModel().getSelectedItem());
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setScene(scene);
+        Parent scene = fxmlLoader.getRoot();
+        stage.setScene(new Scene(scene));
         stage.show();
     }
 

@@ -10,6 +10,10 @@ public class Contacts {
         this.contactName = contactName;
         this.contactEmail = contactEmail;
     }
+    @Override
+    public String toString(){
+        return contactName;
+    }
 
     public int getContactID() {
         return contactID;

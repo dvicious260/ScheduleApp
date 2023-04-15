@@ -37,25 +37,27 @@
 
     <Label text="Start Time" GridPane.columnIndex="0" GridPane.rowIndex="8" />
 
-    <Label text="End Time" GridPane.columnIndex="0" GridPane.rowIndex="9" />
+    <Label text="End Time" GridPane.columnIndex="0" GridPane.rowIndex="10" />
 
-    <Label text="Customer ID" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+    <Label text="Customer ID" GridPane.columnIndex="0" GridPane.rowIndex="11" />
 
-    <Label text="User ID" GridPane.columnIndex="0" GridPane.rowIndex="11" />
+    <Label text="User ID" GridPane.columnIndex="0" GridPane.rowIndex="12" />
 
-    <HBox alignment="center_right" spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="12">
+    <HBox fx:id="saveAction" alignment="center_right" spacing="10" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="13">
         <Button fx:id="btnSave" text="Save" />
         <Button fx:id="btnCancel" onAction="#cancel" text="Cancel" />
     </HBox>
-   <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+   <ComboBox fx:id="contactComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
    <Label text="Appointment ID" GridPane.rowIndex="1" />
-   <TextField fx:id="appointmentID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-   <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-   <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-   <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-   <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+   <TextField fx:id="appointmentIDTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+   <ComboBox fx:id="startComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+   <ComboBox fx:id="endComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+   <ComboBox fx:id="customerComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+   <ComboBox fx:id="userComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
    <Label text="Start Date" GridPane.rowIndex="7" />
-   <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="7" />
+   <DatePicker fx:id="startDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+   <Label text="End Date" GridPane.rowIndex="9" />
+   <DatePicker fx:id="endDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="9" />
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />
@@ -70,6 +72,7 @@
       <RowConstraints />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints />
       <RowConstraints />
       <RowConstraints />
