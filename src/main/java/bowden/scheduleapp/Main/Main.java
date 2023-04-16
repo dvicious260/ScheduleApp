@@ -1,7 +1,9 @@
 package bowden.scheduleapp.Main;
 
+import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.JDBC;
+import bowden.scheduleapp.Model.Appointments;
 import bowden.scheduleapp.Model.Customer;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -11,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.updateCustomer;
@@ -49,6 +52,12 @@ public class Main extends Application {
         //boolean deleteResult = CustomersDAOImpl.deleteCustomer(4);
         //System.out.println("Delete result: " + deleteResult);
 
+        // Appointment 1
+        Appointments appointment1 = new Appointments(3, "Meeting with Bob", "Discuss marketing strategy", "Office", "Meeting", LocalDateTime.of(2023, 4, 20, 10, 30), LocalDateTime.of(2023, 4, 20, 12, 0), 1, 2, 3);
+        // Appointment 2
+        Appointments appointment2 = new Appointments(4, "Lunch with Alice", "Catch up on latest news", "Restaurant", "Lunch", LocalDateTime.of(2023, 4, 21, 12, 30), LocalDateTime.of(2023, 4, 21, 13, 30), 4, 1, 1);
+// Appointment 3
+        Appointments appointment3 = new Appointments(5, "Call with Tom", "Discuss project status", "Phone", "Call", LocalDateTime.of(2023, 4, 22, 14, 0), LocalDateTime.of(2023, 4, 22, 15, 0), 6, 2, 2);
         // Insert customer 1
         Customer customer1 = new Customer(4, "John Smith", "123 Main St", "12345", "555-1234", 1, null);
 

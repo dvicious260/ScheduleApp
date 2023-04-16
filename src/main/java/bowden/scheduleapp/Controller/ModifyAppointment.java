@@ -1,5 +1,6 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.ContactsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.DAO.UserDaoImpl;
@@ -74,6 +75,46 @@ public class ModifyAppointment implements Initializable {
     }
 
     @FXML
+    void save(ActionEvent event) throws IOException, SQLException {
+        int id = Integer.valueOf(appointmentIDTextField.getText());
+        String title = titleTextField.getText();
+        String description = descriptionTextField.getText();
+        String location = locationTextField.getText();
+        String type = typeTextField.getText();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalTime startTime = startComboBox.getValue();
+        LocalDateTime start = LocalDateTime.of(startDate, startTime);
+        LocalDate endDate = endDatePicker.getValue();
+        LocalTime endTime = endComboBox.getValue();
+        LocalDateTime end = LocalDateTime.of(endDate, endTime);
+
+        // Get selected contact and user
+        Contacts contact = contactComboBox.getValue();
+        Users user = userComboBox.getValue();
+
+        // Get selected customer
+        Customer customer = customerComboBox.getValue();
+
+        // Create appointment object and call DAO method to save it
+        Appointments existingAppointment = AppointmentsDaoImpl.getAppointment(id);
+        existingAppointment.setTitle(title);
+        existingAppointment.setDescription(description);
+        existingAppointment.setLocation(location);
+        existingAppointment.setStart(start);
+        existingAppointment.setEnd(end);
+        existingAppointment.setCustomerID(customer.getId());
+        existingAppointment.setUserID(user.getUserID());
+        existingAppointment.setContactID(contact.getContactID());
+        try {
+            AppointmentsDaoImpl.updateAppointment(existingAppointment);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        home(event);
+
+    }
+
+    @FXML
     public void sendAppointment(Appointments appointments) throws SQLException {
         appointmentIDTextField.setText(String.valueOf(appointments.getAppointmentID()));
         titleTextField.setText(appointments.getTitle());
@@ -87,14 +128,10 @@ public class ModifyAppointment implements Initializable {
         typeTextField.setText(appointments.getType());
         startComboBox.setItems(DateTime.getBusinessHours());
         endComboBox.setItems(DateTime.getBusinessHours());
-        Timestamp startTimestamp = appointments.getStart();
-        LocalDateTime startLocalDateTime = startTimestamp.toLocalDateTime();
-        Timestamp endTimestamp = appointments.getEnd();
-        LocalDateTime endLocalDateTime = endTimestamp.toLocalDateTime();
-        startDatePicker.setValue(startLocalDateTime.toLocalDate());
-        startComboBox.setValue(startLocalDateTime.toLocalTime());
-        endDatePicker.setValue(endLocalDateTime.toLocalDate());
-        endComboBox.setValue(endLocalDateTime.toLocalTime());
+        startDatePicker.setValue(appointments.getStart().toLocalDate());
+        startComboBox.setValue(appointments.getStart().toLocalTime());
+        endDatePicker.setValue(appointments.getEnd().toLocalDate());
+        endComboBox.setValue(appointments.getEnd().toLocalTime());
 
 
         customerComboBox.setItems(CustomersDAOImpl.getAllCustomers());

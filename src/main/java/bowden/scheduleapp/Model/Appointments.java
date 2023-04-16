@@ -12,10 +12,10 @@ public class Appointments {
     int customerID;
     int userID;
     int contactID;
-    Timestamp start;
-    Timestamp end;
+    LocalDateTime start;
+    LocalDateTime end;
 
-    public Appointments(int appointmentID, String title, String description, String location, String type, Timestamp start, Timestamp end, int customerID, int userID, int contactID) {
+    public Appointments(int appointmentID, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -31,11 +31,19 @@ public class Appointments {
     public int getAppointmentID() {
         return appointmentID;
     }
-    public Timestamp getStart(){
+    public LocalDateTime getStart(){
         return start;
     }
-    public Timestamp getEnd(){
+    public LocalDateTime getEnd(){
         return end;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
     }
 
     public void setAppointmentID(int appointmentID) {
