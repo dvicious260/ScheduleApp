@@ -5,13 +5,40 @@ import javafx.collections.ObservableList;
 
 import java.sql.Timestamp;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 public class DateTime {
+    private static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
+    private static final ZoneId LOCAL_ZONE_ID = ZoneId.systemDefault();
+
+    public static ZonedDateTime convertToUTC(LocalDateTime localDateTime) {
+        ZonedDateTime localZoneDateTime = localDateTime.atZone(ZoneId.systemDefault());
+        ZoneId utcZoneId = ZoneId.of("UTC");
+        ZonedDateTime utcDateTime = localZoneDateTime.withZoneSameInstant(utcZoneId);
+        return utcDateTime;
+    }
+
+    public static LocalDateTime convertToLocal(ZonedDateTime utcDateTime) {
+        ZoneId localZoneId = ZoneId.systemDefault();
+        ZonedDateTime localDateTime = utcDateTime.withZoneSameInstant(localZoneId);
+        return localDateTime.toLocalDateTime();
+    }
     public static Timestamp getCurrentTimeStamp() {
         ZoneId zoneID = ZoneId.of("UTC");
         LocalDateTime localDateTime = LocalDateTime.now(zoneID);
         Timestamp currentTimestamp = Timestamp.valueOf(localDateTime);
         return currentTimestamp;
+    }
+    public static LocalDateTime convertFromUTCtoLocal(Timestamp timestamp) {
+        ZoneId utcZoneId = ZoneId.of("UTC");
+        ZoneId localZoneId = ZoneId.systemDefault();
+
+        Instant instant = timestamp.toInstant();
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, utcZoneId);
+        ZonedDateTime zonedDateTime = localDateTime.atZone(utcZoneId);
+        ZonedDateTime convertedDateTime = zonedDateTime.withZoneSameInstant(localZoneId);
+
+        return convertedDateTime.toLocalDateTime();
     }
 
     public static LocalDate getCurrentLocalDate() {
@@ -32,5 +59,10 @@ public class DateTime {
             start = start.plusMinutes(15);
         }
         return businessHours;
+    }
+
+    public static String formatLocalDateTime(LocalDateTime localDateTime, String pattern) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        return localDateTime.format(formatter);
     }
 }

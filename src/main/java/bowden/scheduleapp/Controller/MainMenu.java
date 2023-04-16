@@ -156,7 +156,7 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    void modifyAppointment(ActionEvent event) throws IOException {
+    void modifyAppointment(ActionEvent event) throws IOException, SQLException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyAppointment.fxml"));
         fxmlLoader.load();

@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZoneId;
 
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.updateCustomer;
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.insertCustomer;
@@ -58,7 +59,6 @@ public class Main extends Application {
 
         // Insert customer 3
         Customer customer3 = new Customer(6, "Bob Johnson", "789 Oak St", "23456", "555-9012", 3, null);
-
 
         launch();
         //JDBC.openConnection();

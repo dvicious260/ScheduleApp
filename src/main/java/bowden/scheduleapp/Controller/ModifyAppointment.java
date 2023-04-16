@@ -1,6 +1,8 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.ContactsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
+import bowden.scheduleapp.DAO.UserDaoImpl;
 import bowden.scheduleapp.Helper.ContactsHelper;
 import bowden.scheduleapp.Helper.DateTime;
 import bowden.scheduleapp.Helper.UserHelper;
@@ -8,6 +10,7 @@ import bowden.scheduleapp.Model.Appointments;
 import bowden.scheduleapp.Model.Contacts;
 import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.Users;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,7 +18,9 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalTime;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.*;
 import java.util.ResourceBundle;
 
 import static bowden.scheduleapp.Helper.Methods.home;
@@ -40,7 +45,7 @@ public class ModifyAppointment implements Initializable {
     private TextField descriptionTextField;
 
     @FXML
-    private ComboBox<?> endComboBox;
+    private ComboBox<LocalTime> endComboBox;
 
     @FXML
     private DatePicker endDatePicker;
@@ -69,20 +74,38 @@ public class ModifyAppointment implements Initializable {
     }
 
     @FXML
-    public void sendAppointment(Appointments appointments){
+    public void sendAppointment(Appointments appointments) throws SQLException {
         appointmentIDTextField.setText(String.valueOf(appointments.getAppointmentID()));
         titleTextField.setText(appointments.getTitle());
         descriptionTextField.setText(appointments.getDescription());
         locationTextField.setText(appointments.getLocation());
         contactComboBox.setItems(ContactsHelper.getAllContacts());
+        //Get Contact by ID
+        Contacts contact = ContactsDaoImpl.getContactById(appointments.getContactID());
+        contactComboBox.setValue(contact);
+
         typeTextField.setText(appointments.getType());
-        startDatePicker.setValue(appointments.getStart().toLocalDate());
         startComboBox.setItems(DateTime.getBusinessHours());
-        startComboBox.setValue(appointments.getStart().toLocalTime().minusHours(5));
-        endDatePicker.setValue(appointments.getEnd().toLocalDate());
+        endComboBox.setItems(DateTime.getBusinessHours());
+        Timestamp startTimestamp = appointments.getStart();
+        LocalDateTime startLocalDateTime = startTimestamp.toLocalDateTime();
+        Timestamp endTimestamp = appointments.getEnd();
+        LocalDateTime endLocalDateTime = endTimestamp.toLocalDateTime();
+        startDatePicker.setValue(startLocalDateTime.toLocalDate());
+        startComboBox.setValue(startLocalDateTime.toLocalTime());
+        endDatePicker.setValue(endLocalDateTime.toLocalDate());
+        endComboBox.setValue(endLocalDateTime.toLocalTime());
+
+
         customerComboBox.setItems(CustomersDAOImpl.getAllCustomers());
-        //customerComboBox.setValue(appointments.getCustomerID());
+        Customer customer = CustomersDAOImpl.getCustomer(appointments.getCustomerID());
+        customerComboBox.setValue(customer);
         userComboBox.setItems(UserHelper.getAllUsers());
+        Users user = UserDaoImpl.getUser(appointments.getUserID());
+        System.out.println("User retrieved from database: " + user);
+
+        userComboBox.setValue(user);
+
 
 
     }
