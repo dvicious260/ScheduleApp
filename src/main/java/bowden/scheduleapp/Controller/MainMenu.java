@@ -117,6 +117,31 @@ public class MainMenu implements Initializable {
         stage.show();
 
     }
+    @FXML
+    void viewAll(ActionEvent event) {
+        loadAppointments("");
+    }
+
+    @FXML
+    void viewMonth(ActionEvent event) {
+        // Filter by current month
+        int month = LocalDateTime.now().getMonthValue();
+        String filter = "MONTH(start) = " + month;
+        loadAppointments(filter);
+    }
+
+    @FXML
+    void viewWeek(ActionEvent event) {
+        // Filter by current week
+        LocalDateTime now = LocalDateTime.now();
+        String filter = "WEEK(start) = WEEK('" + now + "')";
+        loadAppointments(filter);
+    }
+
+    private void loadAppointments(String filter) {
+        AppointmentsDaoImpl appointmentsDao = new AppointmentsDaoImpl();
+        appointmentTable.setItems(appointmentsDao.getAllAppointments(filter));
+    }
 
     @FXML
     void addCustomer(ActionEvent event) throws IOException {
@@ -185,20 +210,7 @@ public class MainMenu implements Initializable {
         stage.show();
     }
 
-    @FXML
-    void viewAll(ActionEvent event) {
 
-    }
-
-    @FXML
-    void viewMonth(ActionEvent event) {
-
-    }
-
-    @FXML
-    void viewWeek(ActionEvent event) {
-
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -225,9 +237,9 @@ public class MainMenu implements Initializable {
             return property;
         });
         //Initialize appointments table
-        AppointmentsDaoImpl appDAO = new AppointmentsDaoImpl(); // Create an instance of the class
+        //AppointmentsDaoImpl appDAO = new AppointmentsDaoImpl(); // Create an instance of the class
         rbuttonViewAll.setSelected(true);
-        appointmentTable.setItems(appDAO.getAllAppointments());
+        //appointmentTable.setItems(appDAO.getAllAppointments());
         colAppID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         colAppTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colAppDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -238,6 +250,7 @@ public class MainMenu implements Initializable {
         colAppCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         colAppUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
         colAppContactID.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        loadAppointments("");
 
 
     }

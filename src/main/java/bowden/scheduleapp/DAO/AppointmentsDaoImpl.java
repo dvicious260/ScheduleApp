@@ -13,12 +13,13 @@ import java.sql.*;
 import java.time.LocalDateTime;
 
 public class AppointmentsDaoImpl {
-    public static ObservableList<Appointments> getAllAppointments() {
+    public static ObservableList<Appointments> getAllAppointments(String filter) {
         ObservableList<Appointments> allAppointments = FXCollections.observableArrayList();
+        String sqlGetAppointments = "SELECT * FROM appointments";
+        if (!filter.isEmpty()) {
+            sqlGetAppointments += " WHERE " + filter;
+        }
         try {
-
-            String sqlGetAppointments = "SELECT Appointment_ID, Title, Description,Location,Type,Start,End,Customer_ID, User_ID, Contact_ID\n" +
-                    "FROM appointments";
             PreparedStatement ps = JDBC.openConnection().prepareStatement(sqlGetAppointments);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -36,11 +37,13 @@ public class AppointmentsDaoImpl {
                 //System.out.println(appointment.getStart());
                 allAppointments.add(appointment);
             }
-        }catch (SQLException throwables){
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }return allAppointments;
+        }
+        return allAppointments;
     }
-    public static boolean insertAppointment(Appointments appointment) throws SQLException {
+
+        public static boolean insertAppointment(Appointments appointment) throws SQLException {
         String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, appointment.getAppointmentID());
