@@ -8,10 +8,7 @@ import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class CustomersDAOImpl {
     /*public boolean insertCustomer(Customer customer){}
@@ -46,14 +43,15 @@ public class CustomersDAOImpl {
 
 
     public static boolean insertCustomer(Customer customer) throws SQLException {
-        String sql = "INSERT INTO customers (Customer_ID, Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?)";
+        JDBC.openConnection();
+        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?,?,?,?, NOW(), USER(), NOW(), USER(), ?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, customer.getId());
-        ps.setString(2, customer.getName());
-        ps.setString(3, customer.getAddress());
-        ps.setString(4, customer.getPostalCode());
-        ps.setString(5, customer.getPhone());
-        ps.setInt(6, customer.getDivisionID());
+        //ps.setInt(1, customer.getId());
+        ps.setString(1, customer.getName());
+        ps.setString(2, customer.getAddress());
+        ps.setString(3, customer.getPostalCode());
+        ps.setString(4, customer.getPhone());
+        ps.setInt(5, customer.getDivisionID());
 
         int rowsInserted = ps.executeUpdate();
 
@@ -104,6 +102,21 @@ public class CustomersDAOImpl {
         ps.setInt(1, customerId);
         int rowsDeleted = ps.executeUpdate();
         return rowsDeleted > 0;
+    }
+    public static int getMaxCustomerId() throws SQLException {
+        int maxId = 0;
+        try (Connection connection = JDBC.openConnection();
+             Statement statement = connection.createStatement()) {
+            String query = "SELECT MAX(Customer_ID) AS Max_ID FROM customers";
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                maxId = resultSet.getInt("Max_ID");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            throw ex;
+        }
+        return maxId;
     }
 
 

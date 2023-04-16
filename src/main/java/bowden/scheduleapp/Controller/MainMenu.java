@@ -26,6 +26,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainMenu implements Initializable {
+    private static Customer customerSelection;
+    private static Appointments appointmentSelection;
     @FXML
     private TableView<Appointments> appointmentTable;
     @FXML
@@ -176,7 +178,23 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    void deleteCustomer(ActionEvent event) {
+    void deleteCustomer(ActionEvent event) throws SQLException {
+        customerSelection = customerTable.getSelectionModel().getSelectedItem();
+        if (customerSelection == null) {
+            Alert noSelectionAlert = new Alert(Alert.AlertType.ERROR);
+            noSelectionAlert.setTitle("No customer selected");
+            noSelectionAlert.setContentText("Please select a customer to delete");
+            noSelectionAlert.showAndWait();
+        } else {
+            Alert confirmCustomerDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmCustomerDelete.setTitle("Delete Customer");
+            confirmCustomerDelete.setContentText("You are about to permanently delete this customer. Are you sure you want to continue?");
+            Optional<ButtonType> result = confirmCustomerDelete.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                CustomersDAOImpl.deleteCustomer(customerSelection.getId());
+                customerTable.setItems(CustomersDAOImpl.getAllCustomers());
+            }
+        }
 
     }
 

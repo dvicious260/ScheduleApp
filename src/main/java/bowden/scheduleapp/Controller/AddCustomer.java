@@ -1,9 +1,12 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.CountryHelper;
 import bowden.scheduleapp.Helper.DivisionsHelper;
 
 import bowden.scheduleapp.Model.Countries;
+import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +18,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static bowden.scheduleapp.Helper.Methods.home;
@@ -56,13 +60,27 @@ public class AddCustomer implements Initializable {
     }
 
     @FXML
-    void saveCustomer(ActionEvent event) {
-        int id;
+    void saveCustomer(ActionEvent event) throws SQLException, IOException {
+        int id = CustomersDAOImpl.getMaxCustomerId() + 1;
         String customerName = newCustomerName.getText();
         String customerPhone = newCustomerPhone.getText();
         String customerAddress = newCustomerAddress.getText();
         String customerPostal = newCustomerPostal.getText();
+        FirstLevelDivisions division = newCustomerState.getSelectionModel().getSelectedItem();
+        int divisionID = division.getDivisionID();
 
+        Customer newCustomer = new Customer(id,customerName,customerAddress,customerPostal,customerPhone,divisionID,division);
+        try {
+            CustomersDAOImpl.insertCustomer(newCustomer);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        home(event);
+
+
+    }
+    @FXML
+    void deleteCustomer(ActionEvent event) throws IOException{
 
     }
 
