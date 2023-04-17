@@ -5,11 +5,14 @@ import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.TimeZone;
 
 public class AppointmentsDaoImpl {
@@ -112,11 +115,22 @@ public class AppointmentsDaoImpl {
     }
 
     public static boolean deleteAppointment(int appointmentID) throws SQLException {
+        Appointments appointmentToDelete = getAppointment(appointmentID);
+        String appointmentIDString = String.valueOf(appointmentID);
+        String appointmentType = appointmentToDelete.getType();
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, appointmentID);
         int rowsDeleted = ps.executeUpdate();
+
+        Alert deletedAlert = new Alert(Alert.AlertType.INFORMATION);
+        deletedAlert.setTitle("Appointment Canceled");
+        deletedAlert.setHeaderText("Appointment canceled successfully");
+        deletedAlert.setContentText(appointmentType + " appointment with ID " + appointmentIDString + " has been canceled");
+        deletedAlert.showAndWait();
+
         return rowsDeleted > 0;
+
     }
     public static int getMaxAppointmentID() throws SQLException {
         int maxId = 0;
