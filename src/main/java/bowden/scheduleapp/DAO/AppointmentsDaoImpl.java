@@ -49,29 +49,60 @@ public class AppointmentsDaoImpl {
         return allAppointments;
     }
 
-        public static boolean insertAppointment(Appointments appointment) throws SQLException {
-            Connection conn = JDBC.openConnection();
+    public static boolean insertAppointment(Appointments appointment) throws SQLException {
+        Connection conn = JDBC.openConnection();
 
-            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?,?,?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, appointment.getAppointmentID());
-            ps.setString(2, appointment.getTitle());
-            ps.setString(3, appointment.getDescription());
-            ps.setString(4, appointment.getLocation());
-            ps.setString(5, appointment.getType());
-            ps.setString(6, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
-            ps.setString(7, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
-            ps.setInt(8, appointment.getCustomerID());
-            ps.setInt(8, appointment.getCustomerID());
-            ps.setInt(9, appointment.getUserID());
-            ps.setInt(10, appointment.getContactID());
+        // check if the appointment overlaps with any existing appointments for the same customer
+        String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)";
+        PreparedStatement checkOverlapPs = conn.prepareStatement(checkOverlapSql);
+        checkOverlapPs.setInt(1, appointment.getCustomerID());
+        checkOverlapPs.setString(2, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        checkOverlapPs.setString(3, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+        ResultSet overlapRs = checkOverlapPs.executeQuery();
+        if (overlapRs.next()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "The appointment overlaps with an existing appointment for the same customer.", ButtonType.OK);
+            alert.showAndWait();
 
-            int rowsInserted = ps.executeUpdate();
+            return false;
+        }
 
-            System.out.println("Appointment added");
-            return rowsInserted > 0; // return true if the insert succeeded
+        // if there are no overlaps, insert the new appointment
+        String insertSql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?,?,?)";
+        PreparedStatement insertPs = conn.prepareStatement(insertSql);
+        insertPs.setInt(1, appointment.getAppointmentID());
+        insertPs.setString(2, appointment.getTitle());
+        insertPs.setString(3, appointment.getDescription());
+        insertPs.setString(4, appointment.getLocation());
+        insertPs.setString(5, appointment.getType());
+        insertPs.setString(6, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        insertPs.setString(7, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+        insertPs.setInt(8, appointment.getCustomerID());
+        insertPs.setInt(8, appointment.getCustomerID());
+        insertPs.setInt(9, appointment.getUserID());
+        insertPs.setInt(10, appointment.getContactID());
+
+        int rowsInserted = insertPs.executeUpdate();
+
+        System.out.println("Appointment added");
+        return rowsInserted > 0; // return true if the insert succeeded
     }
+
     public static boolean updateAppointment(Appointments appointment) throws SQLException {
+        Connection conn = JDBC.openConnection();
+
+        // check if the appointment overlaps with any existing appointments for the same customer
+        String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)";
+        PreparedStatement checkOverlapPs = conn.prepareStatement(checkOverlapSql);
+        checkOverlapPs.setInt(1, appointment.getCustomerID());
+        checkOverlapPs.setString(2, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        checkOverlapPs.setString(3, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+        ResultSet overlapRs = checkOverlapPs.executeQuery();
+        if (overlapRs.next()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "The appointment overlaps with an existing appointment for the same customer.", ButtonType.OK);
+            alert.showAndWait();
+
+            return false;
+        }
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = USER(), Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setString(1, appointment.getTitle());
