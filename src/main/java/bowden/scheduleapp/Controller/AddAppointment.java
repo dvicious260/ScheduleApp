@@ -3,9 +3,8 @@ package bowden.scheduleapp.Controller;
 import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.ContactsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
-import bowden.scheduleapp.Helper.ContactsHelper;
+import bowden.scheduleapp.DAO.UserDaoImpl;
 import bowden.scheduleapp.Helper.DateTime;
-import bowden.scheduleapp.Helper.UserHelper;
 import bowden.scheduleapp.Model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +14,6 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -100,11 +98,11 @@ public class AddAppointment implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentID.setDisable(true);
         appointmentID.setText("Auto Generated");
-        contactComboBox.setItems(ContactsHelper.getAllContacts());
+        contactComboBox.setItems(ContactsDaoImpl.getAllContacts());
         startComboBox.setItems(DateTime.getBusinessHours());
         endComboBox.setItems(DateTime.getBusinessHours());
         customerComboBox.setItems(CustomersDAOImpl.getAllCustomers());
-        userComboBox.setItems(UserHelper.getAllUsers());
+        userComboBox.setItems(UserDaoImpl.getAllUsers());
 
     }
 }

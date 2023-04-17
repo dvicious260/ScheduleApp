@@ -4,14 +4,11 @@ import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.ContactsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.DAO.UserDaoImpl;
-import bowden.scheduleapp.Helper.ContactsHelper;
 import bowden.scheduleapp.Helper.DateTime;
-import bowden.scheduleapp.Helper.UserHelper;
 import bowden.scheduleapp.Model.Appointments;
 import bowden.scheduleapp.Model.Contacts;
 import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.Users;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +17,6 @@ import javafx.scene.control.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.*;
 import java.util.ResourceBundle;
 
@@ -120,7 +116,7 @@ public class ModifyAppointment implements Initializable {
         titleTextField.setText(appointments.getTitle());
         descriptionTextField.setText(appointments.getDescription());
         locationTextField.setText(appointments.getLocation());
-        contactComboBox.setItems(ContactsHelper.getAllContacts());
+        contactComboBox.setItems(ContactsDaoImpl.getAllContacts());
         //Get Contact by ID
         Contacts contact = ContactsDaoImpl.getContactById(appointments.getContactID());
         contactComboBox.setValue(contact);
@@ -137,7 +133,7 @@ public class ModifyAppointment implements Initializable {
         customerComboBox.setItems(CustomersDAOImpl.getAllCustomers());
         Customer customer = CustomersDAOImpl.getCustomer(appointments.getCustomerID());
         customerComboBox.setValue(customer);
-        userComboBox.setItems(UserHelper.getAllUsers());
+        userComboBox.setItems(UserDaoImpl.getAllUsers());
         Users user = UserDaoImpl.getUser(appointments.getUserID());
         System.out.println("User retrieved from database: " + user);
 

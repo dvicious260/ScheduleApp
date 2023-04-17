@@ -1,11 +1,7 @@
 package bowden.scheduleapp.DAO;
 
-import bowden.scheduleapp.Helper.DivisionsHelper;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Appointments;
-import bowden.scheduleapp.Model.Contacts;
-import bowden.scheduleapp.Model.Customer;
-import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

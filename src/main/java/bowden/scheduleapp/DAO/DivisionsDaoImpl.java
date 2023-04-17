@@ -1,20 +1,17 @@
-package bowden.scheduleapp.Helper;
+package bowden.scheduleapp.DAO;
 
+import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Countries;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
-import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
 
-public class DivisionsHelper {
-
+public class DivisionsDaoImpl {
     public static ObservableList<FirstLevelDivisions> getDivisionsByCountryId(int countryId) {
         ObservableList<FirstLevelDivisions> divisions = FXCollections.observableArrayList();
 
@@ -37,6 +34,7 @@ public class DivisionsHelper {
 
         return divisions;
     }
+
     public static FirstLevelDivisions getDivisionById(int id) throws SQLException {
         FirstLevelDivisions division = null;
 
@@ -55,10 +53,9 @@ public class DivisionsHelper {
 
         return division;
     }
+
     public static Countries getCountryByDivision(FirstLevelDivisions division) throws SQLException {
         int countryId = division.getCountryID();
-        return CountryHelper.getCountryById(countryId);
+        return CountriesDaoImpl.getCountryById(countryId);
     }
-
-
 }

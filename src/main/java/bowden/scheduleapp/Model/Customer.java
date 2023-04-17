@@ -1,7 +1,7 @@
 package bowden.scheduleapp.Model;
 
-import bowden.scheduleapp.Helper.CountryHelper;
-import bowden.scheduleapp.Helper.DivisionsHelper;
+import bowden.scheduleapp.DAO.CountriesDaoImpl;
+import bowden.scheduleapp.DAO.DivisionsDaoImpl;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
@@ -35,13 +35,13 @@ public class Customer {
     }
     public Countries getCountry() throws SQLException {
         FirstLevelDivisions division = this.getDivision();
-        return CountryHelper.getCountryById(division.getCountryID());
+        return CountriesDaoImpl.getCountryById(division.getCountryID());
     }
 
     public void setCountry() throws SQLException {
         if (this.getDivision() != null) {
             int countryId = this.getDivision().getCountryID();
-            ObservableList<Countries> countries = CountryHelper.getAllCountries();
+            ObservableList<Countries> countries = CountriesDaoImpl.getAllCountries();
             for (Countries country : countries) {
                 if (country.getCountryID() == countryId) {
                     this.country = country;
@@ -56,7 +56,7 @@ public class Customer {
 
 
     public FirstLevelDivisions getDivision() throws SQLException {
-        return DivisionsHelper.getDivisionById(this.divisionID);
+        return DivisionsDaoImpl.getDivisionById(this.divisionID);
     }
 
     public int getId() {

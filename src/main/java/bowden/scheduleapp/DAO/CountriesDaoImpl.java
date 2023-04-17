@@ -1,5 +1,6 @@
-package bowden.scheduleapp.Helper;
+package bowden.scheduleapp.DAO;
 
+import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Countries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CountryHelper {
+public class CountriesDaoImpl {
 
     public static ObservableList<Countries> getAllCountries() {
         ObservableList<Countries> countries = FXCollections.observableArrayList();

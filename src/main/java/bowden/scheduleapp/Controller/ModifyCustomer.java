@@ -1,20 +1,17 @@
 package bowden.scheduleapp.Controller;
 
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
-import bowden.scheduleapp.Helper.CountryHelper;
-import bowden.scheduleapp.Helper.DivisionsHelper;
-import bowden.scheduleapp.Helper.Methods;
+import bowden.scheduleapp.DAO.CountriesDaoImpl;
+import bowden.scheduleapp.DAO.DivisionsDaoImpl;
 import bowden.scheduleapp.Model.Countries;
 import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
@@ -94,7 +91,7 @@ public class ModifyCustomer implements Initializable {
         modifyCustomerPostal.setText(customer.getPostalCode());
 
         // populate the country combo box
-        ObservableList<Countries> countries = CountryHelper.getAllCountries();
+        ObservableList<Countries> countries = CountriesDaoImpl.getAllCountries();
         modifyCustomerCountry.setItems(countries);
 
         // set the selected country
@@ -103,7 +100,7 @@ public class ModifyCustomer implements Initializable {
         // set the selected country
         modifyCustomerCountry.getSelectionModel().selectedItemProperty().addListener((observableValue, oldCountry, newCountry) -> {
             // Populate the divisions combo box based on the selected country
-            ObservableList<FirstLevelDivisions> divisions = DivisionsHelper.getDivisionsByCountryId(newCountry.getCountryID());
+            ObservableList<FirstLevelDivisions> divisions = DivisionsDaoImpl.getDivisionsByCountryId(newCountry.getCountryID());
             modifyCustomerState.setItems(divisions);
 
             // If the customer has a division in the new country, select it in the divisions combo box
@@ -119,7 +116,7 @@ public class ModifyCustomer implements Initializable {
         });
 
         // populate the division combo box based on the selected country
-        ObservableList<FirstLevelDivisions> divisions = DivisionsHelper.getDivisionsByCountryId(customer.getCountry().getCountryID());
+        ObservableList<FirstLevelDivisions> divisions = DivisionsDaoImpl.getDivisionsByCountryId(customer.getCountry().getCountryID());
         modifyCustomerState.setItems(divisions);
 
         // set the selected division

@@ -1,7 +1,5 @@
 package bowden.scheduleapp.DAO;
 
-import bowden.scheduleapp.Helper.DateTime;
-import bowden.scheduleapp.Helper.DivisionsHelper;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
@@ -32,7 +30,7 @@ public class CustomersDAOImpl {
                 String customerPostal = rs.getString("Postal_Code");
                 String customerPhone = rs.getString("Phone");
                 int customerDivisionID = rs.getInt("Division_ID");
-                FirstLevelDivisions division = DivisionsHelper.getDivisionById(customerDivisionID);
+                FirstLevelDivisions division = DivisionsDaoImpl.getDivisionById(customerDivisionID);
                 Customer customer = new Customer(customerID, customerName, customerAddress, customerPostal, customerPhone, customerDivisionID, division);
                 allCustomers.add(customer);
             }
@@ -88,7 +86,7 @@ public class CustomersDAOImpl {
             String postalCode = rs.getString("Postal_Code");
             String phone = rs.getString("Phone");
             int divisionId = rs.getInt("Division_ID");
-            FirstLevelDivisions division = DivisionsHelper.getDivisionById(divisionId);
+            FirstLevelDivisions division = DivisionsDaoImpl.getDivisionById(divisionId);
             return new Customer(id, name, address, postalCode, phone, divisionId, division);
         }
 

@@ -1,9 +1,8 @@
 package bowden.scheduleapp.Controller;
 
-import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
-import bowden.scheduleapp.Helper.CountryHelper;
-import bowden.scheduleapp.Helper.DivisionsHelper;
+import bowden.scheduleapp.DAO.CountriesDaoImpl;
+import bowden.scheduleapp.DAO.DivisionsDaoImpl;
 
 import bowden.scheduleapp.Model.Countries;
 import bowden.scheduleapp.Model.Customer;
@@ -89,12 +88,12 @@ public class AddCustomer implements Initializable {
         newCustomerID.setDisable(true);
         newCustomerID.setText("Auto Generated");
 // populate the country combo box
-        ObservableList<Countries> countries = CountryHelper.getAllCountries();
+        ObservableList<Countries> countries = CountriesDaoImpl.getAllCountries();
         newCustomerCountry.setItems(countries);
 
         // set up a listener for the country combo box to populate the division combo box
         newCustomerCountry.getSelectionModel().selectedItemProperty().addListener((observableValue, oldCountry, newCountry) -> {
-            ObservableList<FirstLevelDivisions> divisions = DivisionsHelper.getDivisionsByCountryId(newCountry.getCountryID());
+            ObservableList<FirstLevelDivisions> divisions = DivisionsDaoImpl.getDivisionsByCountryId(newCountry.getCountryID());
             newCustomerState.setItems(divisions);
         });
     }

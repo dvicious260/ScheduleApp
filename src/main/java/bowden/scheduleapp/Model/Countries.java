@@ -1,6 +1,5 @@
 package bowden.scheduleapp.Model;
 
-import bowden.scheduleapp.Helper.CountryHelper;
 import bowden.scheduleapp.Helper.JDBC;
 
 import java.sql.Connection;

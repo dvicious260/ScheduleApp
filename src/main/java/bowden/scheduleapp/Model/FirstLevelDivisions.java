@@ -1,6 +1,6 @@
 package bowden.scheduleapp.Model;
 
-import bowden.scheduleapp.Helper.CountryHelper;
+import bowden.scheduleapp.DAO.CountriesDaoImpl;
 
 import java.sql.SQLException;
 
@@ -45,6 +45,6 @@ public class FirstLevelDivisions {
     }
 
     public Countries getCountry() throws SQLException {
-        return CountryHelper.getCountryById(this.getCountryID());
+        return CountriesDaoImpl.getCountryById(this.getCountryID());
     }
 }

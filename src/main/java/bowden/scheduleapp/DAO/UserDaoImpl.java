@@ -1,10 +1,6 @@
 package bowden.scheduleapp.DAO;
 
-import bowden.scheduleapp.Helper.DivisionsHelper;
 import bowden.scheduleapp.Helper.JDBC;
-import bowden.scheduleapp.Model.Contacts;
-import bowden.scheduleapp.Model.Customer;
-import bowden.scheduleapp.Model.FirstLevelDivisions;
 import bowden.scheduleapp.Model.Users;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,25 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDaoImpl {
-    public static ObservableList<Users> getAllUsers() {
-        ObservableList<Users> allUsers = FXCollections.observableArrayList();
-        try {
 
-            String sqlGetCustomers = "SELECT User_ID, User_Name\n" +
-                    "FROM users\n";
-            PreparedStatement ps = JDBC.openConnection().prepareStatement(sqlGetCustomers);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int userID = rs.getInt("User_ID");
-                String userName = rs.getString("User_Name");
-                String password = rs.getString("Password");
-                Users user = new Users(userID, userName,password);
-                allUsers.add(user);
-            }
-        }catch (SQLException throwables){
-            throwables.printStackTrace();
-        }return allUsers;
-    }
 
 
     public static boolean insertUser(Users user) throws SQLException {
@@ -83,5 +61,26 @@ public class UserDaoImpl {
         ps.setInt(1, userID);
         int rowsDeleted = ps.executeUpdate();
         return rowsDeleted > 0;
+    }
+
+    public static ObservableList<Users> getAllUsers(){
+        ObservableList<Users> users = FXCollections.observableArrayList();
+
+        try (Connection connection = JDBC.openConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM users");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("User_ID");
+                String name = resultSet.getString("User_Name");
+                String password = resultSet.getString("Password");
+
+                users.add(new Users(id, name, password));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return users;
     }
 }
