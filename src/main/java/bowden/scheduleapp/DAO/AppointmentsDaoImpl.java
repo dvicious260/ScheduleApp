@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Optional;
@@ -65,6 +66,21 @@ public class AppointmentsDaoImpl {
 
             return false;
         }
+        // check if the appointment is outside of business hours
+        ObservableList<LocalTime> businessHours = DateTime.getBusinessHours();
+        LocalTime startBusinessHours = businessHours.get(0);
+        LocalTime endBusinessHours = businessHours.get(businessHours.size() - 1);
+        LocalTime startAppointment = appointment.getStart().toLocalTime();
+        LocalTime endAppointment = appointment.getEnd().toLocalTime();
+        if (startAppointment.isBefore(startBusinessHours) || endAppointment.isAfter(endBusinessHours)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Outside of business hours");
+            alert.setHeaderText("Can't Schedule Appointment");
+            alert.setContentText("The time you entered is outside of business hours.\nThe business hours are 8AM-10PM EST");
+            alert.showAndWait();
+
+            return false;
+        }
 
         // if there are no overlaps, insert the new appointment
         String insertSql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?,?,?)";
@@ -87,7 +103,7 @@ public class AppointmentsDaoImpl {
         return rowsInserted > 0; // return true if the insert succeeded
     }
 
-    public static boolean updateAppointment(Appointments appointment) throws SQLException {
+    /*public static boolean updateAppointment(Appointments appointment) throws SQLException {
         Connection conn = JDBC.openConnection();
 
         // check if the appointment overlaps with any existing appointments for the same customer
@@ -122,7 +138,58 @@ public class AppointmentsDaoImpl {
         int rowsUpdated = ps.executeUpdate();
 
         return rowsUpdated > 0;
+    }*/
+    public static boolean updateAppointment(Appointments appointment) throws SQLException {
+        Connection conn = JDBC.openConnection();
+
+        // check if the appointment overlaps with any existing appointments for the same customer
+        String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)";
+        PreparedStatement checkOverlapPs = conn.prepareStatement(checkOverlapSql);
+        checkOverlapPs.setInt(1, appointment.getCustomerID());
+        checkOverlapPs.setString(2, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        checkOverlapPs.setString(3, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+        ResultSet overlapRs = checkOverlapPs.executeQuery();
+        if (overlapRs.next()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "The appointment overlaps with an existing appointment for the same customer.", ButtonType.OK);
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // check if the appointment is outside of business hours
+        ObservableList<LocalTime> businessHours = DateTime.getBusinessHours();
+        LocalTime startBusinessHours = businessHours.get(0);
+        LocalTime endBusinessHours = businessHours.get(businessHours.size() - 1);
+        LocalTime startAppointment = appointment.getStart().toLocalTime();
+        LocalTime endAppointment = appointment.getEnd().toLocalTime();
+        if (startAppointment.isBefore(startBusinessHours) || endAppointment.isAfter(endBusinessHours)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Outside of business hours");
+            alert.setHeaderText("Can't Schedule Appointment");
+            alert.setContentText("The time you entered is outside of business hours.\nThe business hours are 8AM-10PM EST");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = USER(), Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, appointment.getTitle());
+        ps.setString(2, appointment.getDescription());
+        ps.setString(3, appointment.getLocation());
+        ps.setString(4, appointment.getType());
+        ps.setString(5, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        ps.setString(6, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+        ps.setInt(7, appointment.getCustomerID());
+        ps.setInt(8, appointment.getUserID());
+        ps.setInt(9, appointment.getContactID());
+        ps.setInt(10, appointment.getAppointmentID());
+
+        int rowsUpdated = ps.executeUpdate();
+
+        return rowsUpdated > 0;
     }
+
     public static Appointments getAppointment(int appointmentID) throws SQLException {
         Connection conn = JDBC.openConnection();
         String query = "SELECT * FROM appointments WHERE Appointment_ID = ?";
