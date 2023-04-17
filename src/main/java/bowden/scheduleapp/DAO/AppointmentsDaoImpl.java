@@ -44,23 +44,25 @@ public class AppointmentsDaoImpl {
     }
 
         public static boolean insertAppointment(Appointments appointment) throws SQLException {
-        String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?,?,?)";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, appointment.getAppointmentID());
-        ps.setString(2, appointment.getTitle());
-        ps.setString(3, appointment.getDescription());
-        ps.setString(4, appointment.getLocation());
-        ps.setString(5, appointment.getType());
-        ps.setTimestamp(6, Timestamp.valueOf(appointment.getStart()));
-        ps.setTimestamp(7, Timestamp.valueOf(appointment.getEnd()));
-        ps.setInt(8, appointment.getCustomerID());
-        ps.setInt(9, appointment.getUserID());
-        ps.setInt(10, appointment.getContactID());
+            Connection conn = JDBC.openConnection();
 
-        int rowsInserted = ps.executeUpdate();
+            String sql = "INSERT INTO appointments (Appointment_ID, Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?,?,?,?,?,?,?, NOW(), USER(), NOW(), USER(), ?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, appointment.getAppointmentID());
+            ps.setString(2, appointment.getTitle());
+            ps.setString(3, appointment.getDescription());
+            ps.setString(4, appointment.getLocation());
+            ps.setString(5, appointment.getType());
+            ps.setTimestamp(6, Timestamp.valueOf(appointment.getStart()));
+            ps.setTimestamp(7, Timestamp.valueOf(appointment.getEnd()));
+            ps.setInt(8, appointment.getCustomerID());
+            ps.setInt(9, appointment.getUserID());
+            ps.setInt(10, appointment.getContactID());
 
-        System.out.println("Appointment added");
-        return rowsInserted > 0; // return true if the insert succeeded
+            int rowsInserted = ps.executeUpdate();
+
+            System.out.println("Appointment added");
+            return rowsInserted > 0; // return true if the insert succeeded
     }
     public static boolean updateAppointment(Appointments appointment) throws SQLException {
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = USER(), Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
@@ -103,5 +105,20 @@ public class AppointmentsDaoImpl {
             return new Appointments(appointmentID, title, description, location, type, start, end, customerID, userID, contactID);
         }
         return null;
+    }
+    public static int getMaxAppointmentID() throws SQLException {
+        int maxId = 0;
+        try (Connection connection = JDBC.openConnection();
+             Statement statement = connection.createStatement()) {
+            String query = "SELECT MAX(Appointment_ID) AS Max_ID FROM appointments";
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                maxId = resultSet.getInt("Max_ID");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            throw ex;
+        }
+        return maxId;
     }
 }
