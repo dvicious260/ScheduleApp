@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.TimeZone;
 
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.updateCustomer;
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.insertCustomer;

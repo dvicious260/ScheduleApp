@@ -1,5 +1,6 @@
 package bowden.scheduleapp.DAO;
 
+import bowden.scheduleapp.Helper.DateTime;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Appointments;
 import javafx.collections.FXCollections;
@@ -7,6 +8,9 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class AppointmentsDaoImpl {
     public static ObservableList<Appointments> getAllAppointments(String filter) {
@@ -24,8 +28,11 @@ public class AppointmentsDaoImpl {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
+                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                Timestamp startTimestamp = rs.getTimestamp("Start", cal);
+                Timestamp endTimestamp = rs.getTimestamp("End", cal);
+                LocalDateTime start = DateTime.convertFromUTCtoLocal(startTimestamp);
+                LocalDateTime end = DateTime.convertFromUTCtoLocal(endTimestamp);
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
@@ -49,8 +56,9 @@ public class AppointmentsDaoImpl {
             ps.setString(3, appointment.getDescription());
             ps.setString(4, appointment.getLocation());
             ps.setString(5, appointment.getType());
-            ps.setTimestamp(6, Timestamp.valueOf(appointment.getStart()));
-            ps.setTimestamp(7, Timestamp.valueOf(appointment.getEnd()));
+            ps.setString(6, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+            ps.setString(7, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+            ps.setInt(8, appointment.getCustomerID());
             ps.setInt(8, appointment.getCustomerID());
             ps.setInt(9, appointment.getUserID());
             ps.setInt(10, appointment.getContactID());
@@ -67,8 +75,8 @@ public class AppointmentsDaoImpl {
         ps.setString(2, appointment.getDescription());
         ps.setString(3, appointment.getLocation());
         ps.setString(4, appointment.getType());
-        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
-        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
+        ps.setString(5, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        ps.setString(6, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
         ps.setInt(7, appointment.getCustomerID());
         ps.setInt(8, appointment.getUserID());
         ps.setInt(9, appointment.getContactID());

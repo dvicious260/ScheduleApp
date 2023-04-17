@@ -17,17 +17,15 @@ public class DateTime {
         ZonedDateTime utcDateTime = localZoneDateTime.withZoneSameInstant(utcZoneId);
         return utcDateTime;
     }
+    public static LocalDateTime convertLocalToUTC(LocalDateTime localDateTime, ZoneId localZoneId) {
+        // Convert the input LocalDateTime to an Instant in the local time zone
+        Instant localInstant = localDateTime.atZone(localZoneId).toInstant();
 
-    public static LocalDateTime convertToLocal(ZonedDateTime utcDateTime) {
-        ZoneId localZoneId = ZoneId.systemDefault();
-        ZonedDateTime localDateTime = utcDateTime.withZoneSameInstant(localZoneId);
-        return localDateTime.toLocalDateTime();
-    }
-    public static Timestamp getCurrentTimeStamp() {
-        ZoneId zoneID = ZoneId.of("UTC");
-        LocalDateTime localDateTime = LocalDateTime.now(zoneID);
-        Timestamp currentTimestamp = Timestamp.valueOf(localDateTime);
-        return currentTimestamp;
+        // Convert the local Instant to an Instant in UTC
+        Instant utcInstant = localInstant.atZone(ZoneId.of("UTC")).toInstant();
+
+        // Convert the UTC Instant to a LocalDateTime in the system default time zone
+        return LocalDateTime.ofInstant(utcInstant, ZoneId.systemDefault());
     }
     public static LocalDateTime convertFromUTCtoLocal(Timestamp timestamp) {
         ZoneId utcZoneId = ZoneId.of("UTC");
@@ -39,6 +37,17 @@ public class DateTime {
         ZonedDateTime convertedDateTime = zonedDateTime.withZoneSameInstant(localZoneId);
 
         return convertedDateTime.toLocalDateTime();
+    }
+    public static LocalDateTime convertToLocal(ZonedDateTime utcDateTime) {
+        ZoneId localZoneId = ZoneId.systemDefault();
+        ZonedDateTime localDateTime = utcDateTime.withZoneSameInstant(localZoneId);
+        return localDateTime.toLocalDateTime();
+    }
+    public static Timestamp getCurrentTimeStamp() {
+        ZoneId zoneID = ZoneId.of("UTC");
+        LocalDateTime localDateTime = LocalDateTime.now(zoneID);
+        Timestamp currentTimestamp = Timestamp.valueOf(localDateTime);
+        return currentTimestamp;
     }
 
     public static LocalDate getCurrentLocalDate() {

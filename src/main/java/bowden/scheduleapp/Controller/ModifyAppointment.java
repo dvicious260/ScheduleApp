@@ -91,6 +91,7 @@ public class ModifyAppointment implements Initializable {
         // Get selected customer
         Customer customer = customerComboBox.getValue();
 
+
         // Create appointment object and call DAO method to save it
         Appointments existingAppointment = AppointmentsDaoImpl.getAppointment(id);
         existingAppointment.setTitle(title);
@@ -146,6 +147,5 @@ public class ModifyAppointment implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentIDTextField.setDisable(true);
-        appointmentIDTextField.setText("");
     }
 }

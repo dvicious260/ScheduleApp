@@ -97,7 +97,11 @@ public class AddAppointment implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentID.setDisable(true);
-        appointmentID.setText("Auto Generated");
+        try {
+            appointmentID.setText(String.valueOf(AppointmentsDaoImpl.getMaxAppointmentID()+1));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         contactComboBox.setItems(ContactsDaoImpl.getAllContacts());
         startComboBox.setItems(DateTime.getBusinessHours());
         endComboBox.setItems(DateTime.getBusinessHours());

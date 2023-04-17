@@ -86,7 +86,11 @@ public class AddCustomer implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         newCustomerID.setDisable(true);
-        newCustomerID.setText("Auto Generated");
+        try {
+            newCustomerID.setText(String.valueOf(CustomersDAOImpl.getMaxCustomerId()+1));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 // populate the country combo box
         ObservableList<Countries> countries = CountriesDaoImpl.getAllCountries();
         newCustomerCountry.setItems(countries);
