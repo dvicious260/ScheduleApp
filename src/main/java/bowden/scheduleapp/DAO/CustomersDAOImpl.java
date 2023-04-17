@@ -5,6 +5,7 @@ import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 import java.sql.*;
 
@@ -94,13 +95,44 @@ public class CustomersDAOImpl {
     }
 
 
-    public static boolean deleteCustomer(int customerId) throws SQLException {
+    /*public static boolean deleteCustomer(int customerId) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, customerId);
         int rowsDeleted = ps.executeUpdate();
         return rowsDeleted > 0;
+    }*/
+
+    public static boolean deleteCustomer(int customerId) throws SQLException {
+        // check if customer has associated appointments
+        boolean hasAppointments = checkAppointments(customerId);
+        if (hasAppointments) {
+            // show alert box informing user that customer cannot be deleted
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Cannot delete customer");
+            alert.setContentText("This customer has associated appointments and cannot be deleted.");
+            alert.showAndWait();
+            return false;
+        } else {
+            String sql = "DELETE FROM customers WHERE Customer_ID = ?";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setInt(1, customerId);
+            int rowsDeleted = ps.executeUpdate();
+            return rowsDeleted > 0;
+        }
     }
+
+    private static boolean checkAppointments(int customerId) throws SQLException {
+        String sql = "SELECT COUNT(*) AS count FROM appointments WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerId);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        int count = rs.getInt("count");
+        return count > 0;
+    }
+
     public static int getMaxCustomerId() throws SQLException {
         int maxId = 0;
         try (Connection connection = JDBC.openConnection();

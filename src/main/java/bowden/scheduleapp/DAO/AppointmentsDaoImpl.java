@@ -110,6 +110,14 @@ public class AppointmentsDaoImpl {
         }
         return null;
     }
+
+    public static boolean deleteAppointment(int appointmentID) throws SQLException {
+        String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, appointmentID);
+        int rowsDeleted = ps.executeUpdate();
+        return rowsDeleted > 0;
+    }
     public static int getMaxAppointmentID() throws SQLException {
         int maxId = 0;
         try (Connection connection = JDBC.openConnection();

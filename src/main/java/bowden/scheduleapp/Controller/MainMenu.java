@@ -156,7 +156,24 @@ public class MainMenu implements Initializable {
     }
 
     @FXML
-    void deleteAppointment(ActionEvent event) {
+    void deleteAppointment(ActionEvent event) throws SQLException {
+        appointmentSelection = appointmentTable.getSelectionModel().getSelectedItem();
+        if (appointmentSelection == null) {
+            Alert noSelectionAlert = new Alert(Alert.AlertType.ERROR);
+            noSelectionAlert.setTitle("No appointment selected");
+            noSelectionAlert.setContentText("Please select a appointment to delete");
+            noSelectionAlert.showAndWait();
+        } else {
+            Alert confirmAppointmentDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmAppointmentDelete.setTitle("Delete appointment");
+            confirmAppointmentDelete.setContentText("You are about to permanently delete this appointment. Are you sure you want to continue?");
+            Optional<ButtonType> result = confirmAppointmentDelete.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                AppointmentsDaoImpl.deleteAppointment(appointmentSelection.getAppointmentID());
+                rbuttonViewAll.setSelected(true);
+                appointmentTable.setItems(AppointmentsDaoImpl.getAllAppointments(""));
+            }
+        }
 
     }
 
