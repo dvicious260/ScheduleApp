@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="bowden.scheduleapp.View.Login"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowden.scheduleapp.Controller.Login">
+   <children>
+      <Label layoutX="260.0" layoutY="89.0" text="Login">
+         <font>
+            <Font name="Times New Roman Bold Italic" size="33.0" />
+         </font>
+      </Label>
+      <TextField fx:id="usernameText" layoutX="220.0" layoutY="154.0" />
+      <TextField fx:id="passwordText" layoutX="220.0" layoutY="215.0" />
+      <Button fx:id="loginButton" layoutX="233.0" layoutY="277.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <Button fx:id="quitButton" layoutX="314.0" layoutY="278.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#quit" prefHeight="26.0" prefWidth="48.0" text="Quit" />
+      <Label layoutX="272.0" layoutY="137.0" text="Username" />
+      <Label layoutX="274.0" layoutY="200.0" text="Password" />
+      <Label layoutX="246.0" layoutY="312.0" text="Timezone:" textFill="#0000009c">
+         <font>
+            <Font name="Times New Roman Bold Italic" size="26.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelTimezone" alignment="CENTER" contentDisplay="CENTER" layoutX="252.0" layoutY="341.0" text="Timezone" textAlignment="CENTER" textFill="#0000009e">
+         <font>
+            <Font name="Times New Roman Bold Italic" size="25.0" />
+         </font>
+      </Label>
+   </children>
 </AnchorPane>
