@@ -19,9 +19,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.ZoneId;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
+
+    @FXML
+    private Label gettimezoneLabel;
 
     @FXML
     private Label labelTimezone;
@@ -30,10 +34,19 @@ public class Login implements Initializable {
     private Button loginButton;
 
     @FXML
+    private Label loginLabel;
+
+    @FXML
+    private Label passwordLabel;
+
+    @FXML
     private TextField passwordText;
 
     @FXML
     private Button quitButton;
+
+    @FXML
+    private Label usernameLabel;
 
     @FXML
     private TextField usernameText;
@@ -69,9 +82,22 @@ public class Login implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Get the default resource bundle
+        ResourceBundle defaultBundle = ResourceBundle.getBundle("bowden.scheduleapp.Resources.login_en");
+
+        // Get the user's locale
+        Locale userLocale = Locale.getDefault();
+
+        // Get the resource bundle for the user's locale, using the default bundle as a fallback
+        ResourceBundle userBundle = ResourceBundle.getBundle("bowden.scheduleapp.Resources.login", userLocale);
+
+        // Set the translated text for each control
+        loginLabel.setText(userBundle.getString("loginLabel"));
+        passwordLabel.setText(userBundle.getString("passwordLabel"));
+        usernameLabel.setText(userBundle.getString("usernameLabel"));
+        gettimezoneLabel.setText(userBundle.getString("gettimezoneLabel"));
         ZoneId zoneId = ZoneId.systemDefault();
         String zone = String.valueOf(zoneId);
         labelTimezone.setText(zone);
-
     }
 }
