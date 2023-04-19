@@ -12,6 +12,8 @@ module bowden.scheduleapp.scheduleapp {
     opens bowden.scheduleapp.Controller to javafx.fxml;
     exports bowden.scheduleapp.Main;
     opens bowden.scheduleapp.Main to javafx.fxml;
+    opens bowden.scheduleapp.Helper to javafx.base;
+
     /*exports bowden.scheduleapp.Main;
     opens bowden.scheduleapp.Main to javafx.fxml;*/
 }

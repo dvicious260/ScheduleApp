@@ -2,6 +2,7 @@ package bowden.scheduleapp.DAO;
 
 import bowden.scheduleapp.Helper.DateTime;
 import bowden.scheduleapp.Helper.JDBC;
+import bowden.scheduleapp.Helper.MonthlySummary;
 import bowden.scheduleapp.Model.Appointments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,13 +10,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.time.*;
+import java.util.*;
 
 public class AppointmentsDaoImpl {
     public static ObservableList<Appointments> getAllAppointments(String filter) {
@@ -274,6 +270,26 @@ public class AppointmentsDaoImpl {
                 alert.setContentText("You have no appointments within the next 15 minutes");
                 Optional<ButtonType> result = alert.showAndWait();
             }
+
         }
     }
+    public List<MonthlySummary> getMonthlySummary() throws SQLException {
+        List<MonthlySummary> monthlySummaries = new ArrayList<>();
+        Connection conn = JDBC.openConnection();
+        String sql = "SELECT MONTH(start) as month, type, COUNT(*) as total FROM appointments GROUP BY MONTH(start), type";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int monthInt = rs.getInt("month");
+                String month = Month.of(monthInt).toString();
+                String type = rs.getString("type");
+                int total = rs.getInt("total");
+                monthlySummaries.add(new MonthlySummary(month, type, total));
+            }
+        }
+        return monthlySummaries;
+    }
+
 }

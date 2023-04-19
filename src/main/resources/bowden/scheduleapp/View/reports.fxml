@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="501.0" prefWidth="801.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bowden.scheduleapp.Controller.Reports">
+   <children>
+      <TableView fx:id="appointments" layoutX="14.0" layoutY="83.0" prefHeight="130.0" prefWidth="767.0">
+        <columns>
+          <TableColumn fx:id="columnID" prefWidth="50.67114067077637" text="ID" />
+          <TableColumn fx:id="columnTitle" prefWidth="116.14604187011719" text="Title" />
+            <TableColumn fx:id="columnType" prefWidth="105.87730407714844" text="Type" />
+            <TableColumn fx:id="columnDescription" prefWidth="134.27960205078125" text="Description" />
+            <TableColumn fx:id="columnLocation" minWidth="0.0" prefWidth="99.51165771484375" text="Location" />
+            <TableColumn fx:id="columnStart" prefWidth="99.71868896484375" text="Start" />
+            <TableColumn fx:id="columnEnd" prefWidth="87.28131103515625" text="End" />
+            <TableColumn fx:id="columnCustomerID" prefWidth="73.3197021484375" text="Customer ID" />
+        </columns>
+      </TableView>
+      <TableView fx:id="appointmentType" layoutX="26.0" layoutY="239.0" prefHeight="180.0" prefWidth="306.0">
+         <columns>
+            <TableColumn fx:id="columnMonth" prefWidth="121.0968246459961" text="Appointment Month" />
+            <TableColumn fx:id="columnTOA" prefWidth="130.4265594482422" text="Type of appointment" />
+            <TableColumn fx:id="columnTotal" prefWidth="54.073486328125" text="Total" />
+         </columns>
+      </TableView>
+      <TableView fx:id="customerCountry" layoutX="460.0" layoutY="234.0" prefHeight="186.0" prefWidth="323.0">
+         <columns>
+            <TableColumn fx:id="columnCountry" prefWidth="249.14349365234375" text="Country" />
+            <TableColumn fx:id="columnCustomers" prefWidth="72.8564453125" text="Customers" />
+         </columns>
+      </TableView>
+      <Button fx:id="buttonBack" layoutX="378.0" layoutY="441.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <ComboBox fx:id="comboContacts" layoutX="52.0" layoutY="44.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>
