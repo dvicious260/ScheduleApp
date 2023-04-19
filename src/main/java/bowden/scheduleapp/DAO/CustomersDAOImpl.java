@@ -119,6 +119,11 @@ public class CustomersDAOImpl {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ps.setInt(1, customerId);
             int rowsDeleted = ps.executeUpdate();
+            Alert deletedAlert = new Alert(Alert.AlertType.INFORMATION);
+            deletedAlert.setTitle("Customer deleted");
+            deletedAlert.setHeaderText("Customer deleted successfully");
+            deletedAlert.setContentText("Customer with ID " + customerId + " has been deleted");
+            deletedAlert.showAndWait();
             return rowsDeleted > 0;
         }
     }

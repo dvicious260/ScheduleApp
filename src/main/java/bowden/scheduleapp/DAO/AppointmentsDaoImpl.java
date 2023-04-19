@@ -12,6 +12,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -66,13 +67,17 @@ public class AppointmentsDaoImpl {
 
             return false;
         }
-        // check if the appointment is outside of business hours
-        ObservableList<LocalTime> businessHours = DateTime.getBusinessHours();
+        // get the business hours in the user's local time zone
+        ObservableList<LocalTime> businessHours = DateTime.getBusinessHoursInTimeZone(ZoneId.systemDefault());
         LocalTime startBusinessHours = businessHours.get(0);
         LocalTime endBusinessHours = businessHours.get(businessHours.size() - 1);
-        LocalTime startAppointment = appointment.getStart().toLocalTime();
-        LocalTime endAppointment = appointment.getEnd().toLocalTime();
-        if (startAppointment.isBefore(startBusinessHours) || endAppointment.isAfter(endBusinessHours)) {
+
+        // convert the appointment start and end times to the user's local time zone
+        ZonedDateTime startAppointmentLocal = appointment.getStart().atZone(ZoneId.systemDefault());
+        ZonedDateTime endAppointmentLocal = appointment.getEnd().atZone(ZoneId.systemDefault());
+
+        // check if the appointment start and end times fall within the business hours
+        if (startAppointmentLocal.toLocalTime().isBefore(startBusinessHours) || endAppointmentLocal.toLocalTime().isAfter(endBusinessHours)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Outside of business hours");
             alert.setHeaderText("Can't Schedule Appointment");
@@ -156,13 +161,17 @@ public class AppointmentsDaoImpl {
             return false;
         }
 
-        // check if the appointment is outside of business hours
-        ObservableList<LocalTime> businessHours = DateTime.getBusinessHours();
+        // get the business hours in the user's local time zone
+        ObservableList<LocalTime> businessHours = DateTime.getBusinessHoursInTimeZone(ZoneId.systemDefault());
         LocalTime startBusinessHours = businessHours.get(0);
         LocalTime endBusinessHours = businessHours.get(businessHours.size() - 1);
-        LocalTime startAppointment = appointment.getStart().toLocalTime();
-        LocalTime endAppointment = appointment.getEnd().toLocalTime();
-        if (startAppointment.isBefore(startBusinessHours) || endAppointment.isAfter(endBusinessHours)) {
+
+        // convert the appointment start and end times to the user's local time zone
+        ZonedDateTime startAppointmentLocal = appointment.getStart().atZone(ZoneId.systemDefault());
+        ZonedDateTime endAppointmentLocal = appointment.getEnd().atZone(ZoneId.systemDefault());
+
+        // check if the appointment start and end times fall within the business hours
+        if (startAppointmentLocal.toLocalTime().isBefore(startBusinessHours) || endAppointmentLocal.toLocalTime().isAfter(endBusinessHours)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Outside of business hours");
             alert.setHeaderText("Can't Schedule Appointment");
@@ -244,5 +253,27 @@ public class AppointmentsDaoImpl {
             throw ex;
         }
         return maxId;
+    }
+    public static void checkUpcomingAppointments() {
+        ObservableList<Appointments> appointments = getAllAppointments("");
+        for (Appointments appointment : appointments) {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime fifteenMinutesFromNow = now.plusMinutes(15);
+            if (appointment.getStart().isBefore(fifteenMinutesFromNow) && appointment.getStart().isAfter(now)) {
+                // Display an alert
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Upcoming appointment");
+                alert.setHeaderText("You have an appointment coming up!");
+                alert.setContentText("You have an appointment with id " + appointment.getAppointmentID() +" titled "  + appointment.getTitle() + " in less than 15 minutes at " + appointment.getStart().toLocalTime() + " on " + appointment.getStart().toLocalDate() + ".");
+                Optional<ButtonType> result = alert.showAndWait();
+            }else {
+                // Display an alert
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No upcoming appointments");
+                alert.setHeaderText("No upcoming appointments");
+                alert.setContentText("You have no appointments within the next 15 minutes");
+                Optional<ButtonType> result = alert.showAndWait();
+            }
+        }
     }
 }

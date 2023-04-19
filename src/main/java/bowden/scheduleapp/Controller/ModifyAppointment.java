@@ -72,6 +72,14 @@ public class ModifyAppointment implements Initializable {
 
     @FXML
     void save(ActionEvent event) throws IOException, SQLException {
+        if (titleTextField.getText().isEmpty() || descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() || startDatePicker.getValue() == null || startComboBox.getValue() == null || endDatePicker.getValue() == null || endComboBox.getValue() == null || customerComboBox.getValue() == null || userComboBox.getValue() == null || contactComboBox.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Missing Fields");
+            alert.setHeaderText("There are blank fields");
+            alert.setContentText("Please fill in all fields.");
+            alert.showAndWait();
+            return;
+        }
         int id = Integer.valueOf(appointmentIDTextField.getText());
         String title = titleTextField.getText();
         String description = descriptionTextField.getText();

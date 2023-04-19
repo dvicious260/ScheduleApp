@@ -74,4 +74,17 @@ public class DateTime {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return localDateTime.format(formatter);
     }
+    public static ObservableList<LocalTime> getBusinessHoursInTimeZone(ZoneId zoneId) {
+        ObservableList<LocalTime> businessHours = FXCollections.observableArrayList();
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(22, 0);
+        LocalDate today = LocalDate.now(zoneId);
+        while (start.isBefore(end)) {
+            LocalDateTime local = LocalDateTime.of(today, start);
+            ZonedDateTime zone = ZonedDateTime.of(local, zoneId);
+            businessHours.add(zone.withZoneSameInstant(ZoneId.systemDefault()).toLocalTime());
+            start = start.plusMinutes(15);
+        }
+        return businessHours;
+    }
 }

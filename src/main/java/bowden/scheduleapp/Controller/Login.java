@@ -1,5 +1,6 @@
 package bowden.scheduleapp.Controller;
 
+import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.LoginDaoImpl;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Main.Main;
@@ -23,6 +24,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
+    //private final static ResourceBundle LoginResourceBundle = ResourceBundle.getBundle("login", Locale.getDefault());
+
 
     @FXML
     private Label gettimezoneLabel;
@@ -60,6 +63,7 @@ public class Login implements Initializable {
         boolean loginSuccessful = loginDao.getLogin(username, password);
 
         if (loginSuccessful){
+            AppointmentsDaoImpl.checkUpcomingAppointments();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/mainMenu.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(fxmlLoader.load());
@@ -67,9 +71,17 @@ public class Login implements Initializable {
             stage.show();
 
         }else{
+            // Load the appropriate resource bundle for the alerts based on the user's locale
+            ResourceBundle alertsBundle;
+            if (Locale.getDefault().getLanguage().equals("fr")) {
+                alertsBundle = ResourceBundle.getBundle("alerts_fr");
+            } else {
+                alertsBundle = ResourceBundle.getBundle("alerts_en");
+            }
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid login");
-            alert.setContentText("The entered username or password is incorrect");
+            alert.setTitle(alertsBundle.getString("alertTitle"));
+            alert.setContentText(alertsBundle.getString("alertMessage"));
             alert.showAndWait();
         }
 
@@ -83,21 +95,29 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Get the default resource bundle
-        ResourceBundle defaultBundle = ResourceBundle.getBundle("bowden.scheduleapp.Resources.login_en");
+        ResourceBundle defaultBundle = ResourceBundle.getBundle("login");
 
         // Get the user's locale
         Locale userLocale = Locale.getDefault();
 
-        // Get the resource bundle for the user's locale, using the default bundle as a fallback
-        ResourceBundle userBundle = ResourceBundle.getBundle("bowden.scheduleapp.Resources.login", userLocale);
+        // Load the appropriate resource bundle for the user's locale, using the default bundle as a fallback
+        ResourceBundle userBundle;
+        if (userLocale.getLanguage().equals("fr")) {
+            userBundle = ResourceBundle.getBundle("login_fr", userLocale);
+        } else {
+            userBundle = ResourceBundle.getBundle("login_en", userLocale);
+        }
 
         // Set the translated text for each control
         loginLabel.setText(userBundle.getString("loginLabel"));
         passwordLabel.setText(userBundle.getString("passwordLabel"));
         usernameLabel.setText(userBundle.getString("usernameLabel"));
         gettimezoneLabel.setText(userBundle.getString("gettimezoneLabel"));
+        loginButton.setText(userBundle.getString("loginButton"));
+        quitButton.setText(userBundle.getString("quitButton"));
         ZoneId zoneId = ZoneId.systemDefault();
         String zone = String.valueOf(zoneId);
         labelTimezone.setText(zone);
     }
+
 }

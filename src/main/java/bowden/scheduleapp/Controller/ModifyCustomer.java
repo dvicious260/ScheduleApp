@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -55,6 +56,14 @@ public class ModifyCustomer implements Initializable {
 
     @FXML
     void saveCustomer(ActionEvent event) throws IOException, SQLException {
+        if (modifyCustomerName.getText().isEmpty() || modifyCustomerAddress.getText().isEmpty() || modifyCustomerPhone.getText().isEmpty() || modifyCustomerPostal.getText().isEmpty() || modifyCustomerState.getValue() == null || modifyCustomerCountry.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Missing Fields");
+            alert.setHeaderText("There are blank fields");
+            alert.setContentText("Please fill in all fields.");
+            alert.showAndWait();
+            return;
+        }
         String name = modifyCustomerName.getText();
         int id = Integer.parseInt(modifyCustomerID.getText());
         String address = modifyCustomerAddress.getText();
