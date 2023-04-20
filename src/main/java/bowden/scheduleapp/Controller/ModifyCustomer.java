@@ -1,7 +1,7 @@
 package bowden.scheduleapp.Controller;
 
-import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.DAO.CountriesDaoImpl;
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.DAO.DivisionsDaoImpl;
 import bowden.scheduleapp.Model.Countries;
 import bowden.scheduleapp.Model.Customer;

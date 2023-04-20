@@ -2,7 +2,6 @@ package bowden.scheduleapp.Controller;
 
 import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.LoginDaoImpl;
-import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Helper.UserActivityLogger;
 import bowden.scheduleapp.Main.Main;
 import javafx.event.ActionEvent;
@@ -20,7 +19,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;

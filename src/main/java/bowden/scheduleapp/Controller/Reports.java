@@ -2,14 +2,11 @@ package bowden.scheduleapp.Controller;
 
 import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.ContactsDaoImpl;
-import bowden.scheduleapp.DAO.CustomersDAO;
 import bowden.scheduleapp.DAO.CustomersDAOImpl;
 import bowden.scheduleapp.Helper.CountryStats;
 import bowden.scheduleapp.Helper.MonthlySummary;
 import bowden.scheduleapp.Model.Appointments;
 import bowden.scheduleapp.Model.Contacts;
-import bowden.scheduleapp.Model.Countries;
-import bowden.scheduleapp.Model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

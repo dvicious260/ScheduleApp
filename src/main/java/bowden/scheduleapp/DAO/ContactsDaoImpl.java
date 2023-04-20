@@ -2,7 +2,6 @@ package bowden.scheduleapp.DAO;
 
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Contacts;
-import bowden.scheduleapp.Model.Countries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
