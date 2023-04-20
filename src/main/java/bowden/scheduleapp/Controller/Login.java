@@ -10,10 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,6 +18,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.ZoneId;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
@@ -92,6 +90,14 @@ public class Login implements Initializable {
 
     @FXML
     void quit(ActionEvent event) {
+        Alert quitAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        quitAlert.setTitle("Quit Application");
+        quitAlert.setContentText("Are you sure you want to quit?");
+        Optional<ButtonType> result = quitAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+        }
 
     }
 

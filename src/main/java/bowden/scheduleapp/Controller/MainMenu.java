@@ -146,7 +146,7 @@ public class MainMenu implements Initializable {
 
     private void loadAppointments(String filter) {
         AppointmentsDaoImpl appointmentsDao = new AppointmentsDaoImpl();
-        appointmentTable.setItems(AppointmentsDaoImpl.getAllAppointments(filter));
+        appointmentTable.setItems(appointmentsDao.getAllAppointments(filter));
     }
 
     @FXML
@@ -231,39 +231,55 @@ public class MainMenu implements Initializable {
 
     @FXML
     void modifyAppointment(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyAppointment.fxml"));
-        fxmlLoader.load();
+        appointmentSelection = appointmentTable.getSelectionModel().getSelectedItem();
+        if (appointmentSelection == null) {
+            Alert noSelectionAlert = new Alert(Alert.AlertType.ERROR);
+            noSelectionAlert.setTitle("No appointment selected");
+            noSelectionAlert.setContentText("Please select a appointment to modify");
+            noSelectionAlert.showAndWait();
+        } else {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyAppointment.fxml"));
+            fxmlLoader.load();
 
-        ModifyAppointment modifyAppointment = fxmlLoader.getController();
-        modifyAppointment.sendAppointment(appointmentTable.getSelectionModel().getSelectedItem());
+            ModifyAppointment modifyAppointment = fxmlLoader.getController();
+            modifyAppointment.sendAppointment(appointmentTable.getSelectionModel().getSelectedItem());
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent scene = fxmlLoader.getRoot();
-        stage.setScene(new Scene(scene));
-        stage.show();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent scene = fxmlLoader.getRoot();
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
     }
 
     @FXML
     void modifyCustomer(ActionEvent event) throws IOException, SQLException {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyCustomer.fxml"));
-        fxmlLoader.load();
+        customerSelection = customerTable.getSelectionModel().getSelectedItem();
+        if (customerSelection == null) {
+            Alert noSelectionAlert = new Alert(Alert.AlertType.ERROR);
+            noSelectionAlert.setTitle("No customer selected");
+            noSelectionAlert.setContentText("Please select a customer to modify");
+            noSelectionAlert.showAndWait();
+        } else {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/bowden/scheduleapp/View/modifyCustomer.fxml"));
+            fxmlLoader.load();
 
-        ModifyCustomer modifyCustomer = fxmlLoader.getController();
-        modifyCustomer.sendCustomer(customerTable.getSelectionModel().getSelectedItem());
+            ModifyCustomer modifyCustomer = fxmlLoader.getController();
+            modifyCustomer.sendCustomer(customerTable.getSelectionModel().getSelectedItem());
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent scene = fxmlLoader.getRoot();
-        stage.setScene(new Scene(scene));
-        stage.show();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Parent scene = fxmlLoader.getRoot();
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CustomersDAOImpl dao = new CustomersDAOImpl(); // Create an instance of the class
-        customerTable.setItems(CustomersDAOImpl.getAllCustomers());
+        customerTable.setItems(dao.getAllCustomers());
         colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
