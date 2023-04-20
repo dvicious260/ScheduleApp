@@ -104,42 +104,7 @@ public class AppointmentsDaoImpl {
         return rowsInserted > 0; // return true if the insert succeeded
     }
 
-    /*public static boolean updateAppointment(Appointments appointment) throws SQLException {
-        Connection conn = JDBC.openConnection();
 
-        // check if the appointment overlaps with any existing appointments for the same customer
-        String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)";
-        PreparedStatement checkOverlapPs = conn.prepareStatement(checkOverlapSql);
-        checkOverlapPs.setInt(1, appointment.getCustomerID());
-        checkOverlapPs.setString(2, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
-        checkOverlapPs.setString(3, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
-        ResultSet overlapRs = checkOverlapPs.executeQuery();
-        if (overlapRs.next()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "The appointment overlaps with an existing appointment for the same customer.", ButtonType.OK);
-            alert.showAndWait();
-
-            return false;
-        }
-        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = NOW(), Last_Updated_By = USER(), Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, appointment.getTitle());
-        ps.setString(2, appointment.getDescription());
-        ps.setString(3, appointment.getLocation());
-        ps.setString(4, appointment.getType());
-        ps.setString(5, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
-        ps.setString(6, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
-        ps.setInt(7, appointment.getCustomerID());
-        ps.setInt(8, appointment.getUserID());
-        ps.setInt(9, appointment.getContactID());
-        ps.setInt(10, appointment.getAppointmentID());
-
-
-
-
-        int rowsUpdated = ps.executeUpdate();
-
-        return rowsUpdated > 0;
-    }*/
     public static boolean updateAppointment(Appointments appointment) throws SQLException {
         Connection conn = JDBC.openConnection();
 
@@ -291,5 +256,35 @@ public class AppointmentsDaoImpl {
         }
         return monthlySummaries;
     }
+    public static ObservableList<Appointments> getAppointmentsByCustomer(int contactID) {
+        ObservableList<Appointments> appointments = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM appointments WHERE Contact_ID = ?";
+        try {
+            PreparedStatement ps = JDBC.openConnection().prepareStatement(sql);
+            ps.setInt(1, contactID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int appointmentID = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+                Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                Timestamp startTimestamp = rs.getTimestamp("Start", cal);
+                Timestamp endTimestamp = rs.getTimestamp("End", cal);
+                LocalDateTime start = DateTime.convertFromUTCtoLocal(startTimestamp);
+                LocalDateTime end = DateTime.convertFromUTCtoLocal(endTimestamp);
+                int customerID = rs.getInt("Customer_ID");
+                int userID = rs.getInt("User_ID");
+                int contact = rs.getInt("Contact_ID");
+                Appointments appointment = new Appointments(appointmentID, title, description, location, type, start, end, customerID, userID, contact);
+                appointments.add(appointment);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return appointments;
+    }
+
 
 }

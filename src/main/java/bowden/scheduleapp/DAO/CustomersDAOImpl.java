@@ -1,5 +1,6 @@
 package bowden.scheduleapp.DAO;
 
+import bowden.scheduleapp.Helper.CountryStats;
 import bowden.scheduleapp.Helper.JDBC;
 import bowden.scheduleapp.Model.Customer;
 import bowden.scheduleapp.Model.FirstLevelDivisions;
@@ -8,6 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomersDAOImpl {
     /*public boolean insertCustomer(Customer customer){}
@@ -152,6 +155,29 @@ public class CustomersDAOImpl {
             throw ex;
         }
         return maxId;
+    }
+    public List<CountryStats> getCountryStats() throws SQLException {
+        Connection conn = JDBC.openConnection();
+        List<CountryStats> countryStatistics = new ArrayList<>();
+
+        String sql = "SELECT countries.country, COUNT(customers.customer_ID) as customer_count " +
+                "FROM customers " +
+                "JOIN first_level_divisions ON customers.division_ID = first_level_divisions.division_ID " +
+                "JOIN countries ON first_level_divisions.country_ID = countries.country_ID " +
+                "GROUP BY countries.country " +
+                "ORDER BY customer_count DESC";
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String country = rs.getString("country");
+                int customerCount = rs.getInt("customer_count");
+                CountryStats stats = new CountryStats(country, customerCount);
+                countryStatistics.add(stats);
+            }
+        }
+
+        return countryStatistics;
     }
 
 

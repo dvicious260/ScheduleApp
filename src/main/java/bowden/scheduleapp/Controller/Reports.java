@@ -1,9 +1,17 @@
 package bowden.scheduleapp.Controller;
 
 import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
+import bowden.scheduleapp.DAO.ContactsDaoImpl;
+import bowden.scheduleapp.DAO.CustomersDAO;
+import bowden.scheduleapp.DAO.CustomersDAOImpl;
+import bowden.scheduleapp.Helper.CountryStats;
 import bowden.scheduleapp.Helper.MonthlySummary;
 import bowden.scheduleapp.Model.Appointments;
+import bowden.scheduleapp.Model.Contacts;
 import bowden.scheduleapp.Model.Countries;
+import bowden.scheduleapp.Model.Customer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,7 +21,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static bowden.scheduleapp.DAO.AppointmentsDaoImpl.getAppointmentsByCustomer;
 
 public class Reports {
 
@@ -21,37 +32,37 @@ public class Reports {
     private TableView<MonthlySummary> appointmentType;
 
     @FXML
-    private TableView<MonthlySummary> appointments;
+    private TableView<Appointments> appointmentsContact;
 
     @FXML
     private Button buttonBack;
 
     @FXML
-    private TableColumn<Countries, String> columnCountry;
+    private TableColumn<CountryStats, String> columnCountry;
 
     @FXML
-    private TableColumn<?, ?> columnCustomerID;
+    private TableColumn<Appointments, Integer> columnCustomerID;
 
     @FXML
-    private TableColumn<?, ?> columnCustomers;
+    private TableColumn<CountryStats, Integer> columnCustomers;
 
     @FXML
-    private TableColumn<?, ?> columnDescription;
+    private TableColumn<Appointments, String> columnDescription;
 
     @FXML
-    private TableColumn<?, ?> columnEnd;
+    private TableColumn<Appointments, LocalDateTime> columnEnd;
 
     @FXML
     private TableColumn<?, ?> columnID;
 
     @FXML
-    private TableColumn<?, ?> columnLocation;
+    private TableColumn<Appointments, String> columnLocation;
 
     @FXML
     private TableColumn<MonthlySummary, String> columnMonth;
 
     @FXML
-    private TableColumn<?, ?> columnStart;
+    private TableColumn<Appointments, LocalDateTime> columnStart;
 
     @FXML
     private TableColumn<MonthlySummary, String> columnTOA;
@@ -63,19 +74,20 @@ public class Reports {
     private TableColumn<MonthlySummary, Integer> columnTotal;
 
     @FXML
-    private TableColumn<?, ?> columnType;
+    private TableColumn<Appointments, String> columnType;
 
     @FXML
-    private ComboBox<?> comboContacts;
+    private ComboBox<Contacts> comboContacts;
 
     @FXML
-    private TableView<?> customerCountry;
+    private TableView<CountryStats> customerCountry;
 
     @FXML
     void back(ActionEvent event) {
 
     }
-    public void initialize() {
+
+    public void initialize() throws SQLException {
         try {
             AppointmentsDaoImpl getSummary = new AppointmentsDaoImpl();
             // get the monthly summaries from the database
@@ -89,11 +101,54 @@ public class Reports {
             columnTOA.setCellValueFactory(new PropertyValueFactory<>("appointmentType"));
             columnTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
+            // populate the combo box with contacts
+            ContactsDaoImpl contactsDao = new ContactsDaoImpl();
+            ObservableList<Contacts> contacts = FXCollections.observableArrayList(contactsDao.getAllContacts());
+            comboContacts.setItems(contacts);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
+
+        comboContacts.setValue(comboContacts.getItems().get(1));
+        // Add an event handler to the combo box to update the table view
+        comboContacts.setOnAction(event -> {
+            // Get the selected customer
+            Contacts selectedContact = comboContacts.getValue();
+            int contactID = selectedContact.getContactID();
+
+            ObservableList<Appointments> appointments = getAppointmentsByCustomer(contactID);
+            System.out.println("Number of appointments retrieved: " + appointments.size());
+
+            // Set the items of the table view to the list of appointments
+            appointmentsList.setAll(appointments);
+
+            // set the cell value factories for each column
+            columnID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+            columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+            columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+            columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+            columnStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+            columnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+            columnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+            columnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+
+            // set the items of the appointments table view with the list of appointments
+            appointmentsContact.setItems(appointmentsList);
+        });
+
+        // populate the customer country table view with country statistics
+        CustomersDAOImpl customersDAO = new CustomersDAOImpl();
+        List<CountryStats> countryStatistics = customersDAO.getCountryStats();
+        customerCountry.getItems().setAll(countryStatistics);
+
+        // set the cell value factories for each column
+        columnCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        columnCustomers.setCellValueFactory(new PropertyValueFactory<>("customerCount"));
+
+        // ...
     }
-
-
 }
 
