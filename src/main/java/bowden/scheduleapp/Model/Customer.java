@@ -17,13 +17,16 @@ public class Customer {
 
     private Countries country;
     FirstLevelDivisions division;
+
     public Customer() {
         // Blank constructor
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return String.valueOf(id);
     }
+
     public Customer(int id, String name, String address, String postalCode, String phone, int divisionID, FirstLevelDivisions division) {
         this.id = id;
         this.name = name;
@@ -33,6 +36,7 @@ public class Customer {
         this.divisionID = divisionID;
         //this.divisionName = divisionName;
     }
+
     public Countries getCountry() throws SQLException {
         FirstLevelDivisions division = this.getDivision();
         return CountriesDaoImpl.getCountryById(division.getCountryID());
@@ -50,9 +54,6 @@ public class Customer {
             }
         }
     }
-
-
-
 
 
     public FirstLevelDivisions getDivision() throws SQLException {

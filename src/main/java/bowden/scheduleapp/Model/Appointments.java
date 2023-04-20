@@ -31,10 +31,12 @@ public class Appointments {
     public int getAppointmentID() {
         return appointmentID;
     }
-    public LocalDateTime getStart(){
+
+    public LocalDateTime getStart() {
         return start;
     }
-    public LocalDateTime getEnd(){
+
+    public LocalDateTime getEnd() {
         return end;
     }
 

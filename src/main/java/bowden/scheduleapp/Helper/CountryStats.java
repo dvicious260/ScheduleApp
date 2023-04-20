@@ -1,8 +1,8 @@
 package bowden.scheduleapp.Helper;
 
 public class CountryStats {
-    private String country;
-    private int customerCount;
+    private final String country;
+    private final int customerCount;
 
     public CountryStats(String country, int customerCount) {
         this.country = country;

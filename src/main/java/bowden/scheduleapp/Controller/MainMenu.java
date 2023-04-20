@@ -101,6 +101,9 @@ public class MainMenu implements Initializable {
     private Button btnModifyCustomer;
 
     @FXML
+    private Button buttonReports;
+
+    @FXML
     private RadioButton rbuttonViewAll;
 
     @FXML
@@ -119,6 +122,7 @@ public class MainMenu implements Initializable {
         stage.show();
 
     }
+
     @FXML
     void viewAll(ActionEvent event) {
         loadAppointments("");
@@ -142,12 +146,22 @@ public class MainMenu implements Initializable {
 
     private void loadAppointments(String filter) {
         AppointmentsDaoImpl appointmentsDao = new AppointmentsDaoImpl();
-        appointmentTable.setItems(appointmentsDao.getAllAppointments(filter));
+        appointmentTable.setItems(AppointmentsDaoImpl.getAllAppointments(filter));
     }
 
     @FXML
     void addCustomer(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/addCustomer.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
+    @FXML
+    void reports(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/reports.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
@@ -246,16 +260,16 @@ public class MainMenu implements Initializable {
     }
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         CustomersDAOImpl dao = new CustomersDAOImpl(); // Create an instance of the class
-        customerTable.setItems(dao.getAllCustomers());
+        customerTable.setItems(CustomersDAOImpl.getAllCustomers());
         colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         colCustomerPostal.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
         colCustomerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        // Use a lambda expression to set the cell value factory for the "State/Province" column
         colCustomerState.setCellValueFactory(cellData -> {
             SimpleStringProperty property = new SimpleStringProperty();
             FirstLevelDivisions division = null;

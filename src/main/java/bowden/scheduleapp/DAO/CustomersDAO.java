@@ -4,12 +4,14 @@ import bowden.scheduleapp.Model.Customer;
 import javafx.collections.ObservableList;
 
 public interface CustomersDAO {
-    public ObservableList<Customer> getAllCustomers();
+    ObservableList<Customer> getAllCustomers();
 
     boolean insertCustomer(Customer customer);
 
-    public boolean updateCustomer();
-    public void getCustomer();
-    public boolean deleteCustomer();
+    boolean updateCustomer();
+
+    void getCustomer();
+
+    boolean deleteCustomer();
 
 }

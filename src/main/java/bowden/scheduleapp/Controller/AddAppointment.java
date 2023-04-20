@@ -61,9 +61,10 @@ public class AddAppointment implements Initializable {
 
 
     @FXML
-    void cancel(ActionEvent event) throws IOException{
+    void cancel(ActionEvent event) throws IOException {
         home(event);
     }
+
     @FXML
     void save(ActionEvent event) throws IOException, SQLException {
         if (titleTextField.getText().isEmpty() || descriptionTextField.getText().isEmpty() || locationTextField.getText().isEmpty() || typeTextField.getText().isEmpty() || startDatePicker.getValue() == null || startComboBox.getValue() == null || endDatePicker.getValue() == null || endComboBox.getValue() == null || customerComboBox.getValue() == null || userComboBox.getValue() == null || contactComboBox.getValue() == null) {
@@ -93,7 +94,7 @@ public class AddAppointment implements Initializable {
         // Get selected customer
         Customer customer = customerComboBox.getValue();
 
-        Appointments newAppointment = new Appointments(id,title, description, location, type, start, end, customer.getId(), user.getUserID(), contact.getContactID());
+        Appointments newAppointment = new Appointments(id, title, description, location, type, start, end, customer.getId(), user.getUserID(), contact.getContactID());
         try {
             AppointmentsDaoImpl.insertAppointment(newAppointment);
         } catch (SQLException e) {
@@ -106,7 +107,7 @@ public class AddAppointment implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         appointmentID.setDisable(true);
         try {
-            appointmentID.setText(String.valueOf(AppointmentsDaoImpl.getMaxAppointmentID()+1));
+            appointmentID.setText(String.valueOf(AppointmentsDaoImpl.getMaxAppointmentID() + 1));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

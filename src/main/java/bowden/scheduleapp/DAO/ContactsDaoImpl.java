@@ -28,7 +28,7 @@ public class ContactsDaoImpl {
         return null;
     }
 
-    public static ObservableList<Contacts> getAllContacts(){
+    public static ObservableList<Contacts> getAllContacts() {
         ObservableList<Contacts> contacts = FXCollections.observableArrayList();
 
         try (Connection connection = JDBC.openConnection();

@@ -17,6 +17,7 @@ public class DateTime {
         ZonedDateTime utcDateTime = localZoneDateTime.withZoneSameInstant(utcZoneId);
         return utcDateTime;
     }
+
     public static LocalDateTime convertLocalToUTC(LocalDateTime localDateTime, ZoneId localZoneId) {
         // Convert the input LocalDateTime to an Instant in the local time zone
         Instant localInstant = localDateTime.atZone(localZoneId).toInstant();
@@ -27,6 +28,7 @@ public class DateTime {
         // Convert the UTC Instant to a LocalDateTime in the system default time zone
         return LocalDateTime.ofInstant(utcInstant, ZoneId.systemDefault());
     }
+
     public static LocalDateTime convertFromUTCtoLocal(Timestamp timestamp) {
         ZoneId utcZoneId = ZoneId.of("UTC");
         ZoneId localZoneId = ZoneId.systemDefault();
@@ -38,11 +40,13 @@ public class DateTime {
 
         return convertedDateTime.toLocalDateTime();
     }
+
     public static LocalDateTime convertToLocal(ZonedDateTime utcDateTime) {
         ZoneId localZoneId = ZoneId.systemDefault();
         ZonedDateTime localDateTime = utcDateTime.withZoneSameInstant(localZoneId);
         return localDateTime.toLocalDateTime();
     }
+
     public static Timestamp getCurrentTimeStamp() {
         ZoneId zoneID = ZoneId.of("UTC");
         LocalDateTime localDateTime = LocalDateTime.now(zoneID);
@@ -74,6 +78,7 @@ public class DateTime {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return localDateTime.format(formatter);
     }
+
     public static ObservableList<LocalTime> getBusinessHoursInTimeZone(ZoneId zoneId) {
         ObservableList<LocalTime> businessHours = FXCollections.observableArrayList();
         LocalTime start = LocalTime.of(8, 0);

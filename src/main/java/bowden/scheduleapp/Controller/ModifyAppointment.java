@@ -65,8 +65,9 @@ public class ModifyAppointment implements Initializable {
 
     @FXML
     private ComboBox<Users> userComboBox;
+
     @FXML
-    void cancel(ActionEvent event) throws IOException{
+    void cancel(ActionEvent event) throws IOException {
         home(event);
     }
 
@@ -144,10 +145,7 @@ public class ModifyAppointment implements Initializable {
         customerComboBox.setValue(customer);
         userComboBox.setItems(UserDaoImpl.getAllUsers());
         Users user = UserDaoImpl.getUser(appointments.getUserID());
-        System.out.println("User retrieved from database: " + user);
-
         userComboBox.setValue(user);
-
 
 
     }

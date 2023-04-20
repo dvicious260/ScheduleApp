@@ -39,8 +39,9 @@ public class FirstLevelDivisions {
     public void setCountryID(int countryID) {
         this.countryID = countryID;
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return divisionName;
     }
 

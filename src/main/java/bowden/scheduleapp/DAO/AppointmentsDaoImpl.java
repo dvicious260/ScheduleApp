@@ -49,6 +49,12 @@ public class AppointmentsDaoImpl {
 
     public static boolean insertAppointment(Appointments appointment) throws SQLException {
         Connection conn = JDBC.openConnection();
+        if (appointment.getEnd().isBefore(appointment.getStart())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "The end date or time cannot be before the start date or time.", ButtonType.OK);
+            alert.setTitle("Date and Time error");
+            alert.showAndWait();
+            return false;
+        }
 
         // check if the appointment overlaps with any existing appointments for the same customer
         String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)";
@@ -59,6 +65,7 @@ public class AppointmentsDaoImpl {
         ResultSet overlapRs = checkOverlapPs.executeQuery();
         if (overlapRs.next()) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "The appointment overlaps with an existing appointment for the same customer.", ButtonType.OK);
+            alert.setTitle("Existing appointment error");
             alert.showAndWait();
 
             return false;
@@ -108,15 +115,24 @@ public class AppointmentsDaoImpl {
     public static boolean updateAppointment(Appointments appointment) throws SQLException {
         Connection conn = JDBC.openConnection();
 
+        if (appointment.getEnd().isBefore(appointment.getStart())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "The end date or time cannot be before the start date or time.", ButtonType.OK);
+            alert.setTitle("Date and Time error");
+            alert.showAndWait();
+            return false;
+        }
+
         // check if the appointment overlaps with any existing appointments for the same customer
-        String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)";
+        String checkOverlapSql = "SELECT * FROM appointments WHERE Customer_ID = ? AND Appointment_ID <> ? AND (? BETWEEN Start AND End OR ? BETWEEN Start AND End)\n";
         PreparedStatement checkOverlapPs = conn.prepareStatement(checkOverlapSql);
         checkOverlapPs.setInt(1, appointment.getCustomerID());
-        checkOverlapPs.setString(2, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
-        checkOverlapPs.setString(3, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
+        checkOverlapPs.setInt(2, appointment.getAppointmentID());
+        checkOverlapPs.setString(3, DateTime.convertLocalToUTC(appointment.getStart(), ZoneId.systemDefault()).toString());
+        checkOverlapPs.setString(4, DateTime.convertLocalToUTC(appointment.getEnd(), ZoneId.systemDefault()).toString());
         ResultSet overlapRs = checkOverlapPs.executeQuery();
         if (overlapRs.next()) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "The appointment overlaps with an existing appointment for the same customer.", ButtonType.OK);
+            alert.setTitle("Existing appointment error");
             alert.showAndWait();
 
             return false;
@@ -200,6 +216,7 @@ public class AppointmentsDaoImpl {
         return rowsDeleted > 0;
 
     }
+
     public static int getMaxAppointmentID() throws SQLException {
         int maxId = 0;
         try (Connection connection = JDBC.openConnection();
@@ -215,29 +232,34 @@ public class AppointmentsDaoImpl {
         }
         return maxId;
     }
+
     public static void checkUpcomingAppointments() {
         ObservableList<Appointments> appointments = getAllAppointments("");
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime fifteenMinutesFromNow = now.plusMinutes(15);
+        boolean hasUpcomingAppointments = false;
+
         for (Appointments appointment : appointments) {
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime fifteenMinutesFromNow = now.plusMinutes(15);
             if (appointment.getStart().isBefore(fifteenMinutesFromNow) && appointment.getStart().isAfter(now)) {
-                // Display an alert
+                hasUpcomingAppointments = true;
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Upcoming appointment");
                 alert.setHeaderText("You have an appointment coming up!");
-                alert.setContentText("You have an appointment with id " + appointment.getAppointmentID() +" titled "  + appointment.getTitle() + " in less than 15 minutes at " + appointment.getStart().toLocalTime() + " on " + appointment.getStart().toLocalDate() + ".");
+                alert.setContentText("You have an appointment with id " + appointment.getAppointmentID() + " titled " + appointment.getTitle() + " in less than 15 minutes at " + appointment.getStart().toLocalTime() + " on " + appointment.getStart().toLocalDate() + ".");
                 Optional<ButtonType> result = alert.showAndWait();
-            }else {
-                // Display an alert
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No upcoming appointments");
-                alert.setHeaderText("No upcoming appointments");
-                alert.setContentText("You have no appointments within the next 15 minutes");
-                Optional<ButtonType> result = alert.showAndWait();
+                break; // exit loop after first alert
             }
+        }
 
+        if (!hasUpcomingAppointments) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No upcoming appointments");
+            alert.setHeaderText("No upcoming appointments");
+            alert.setContentText("You have no appointments within the next 15 minutes");
+            Optional<ButtonType> result = alert.showAndWait();
         }
     }
+
     public List<MonthlySummary> getMonthlySummary() throws SQLException {
         List<MonthlySummary> monthlySummaries = new ArrayList<>();
         Connection conn = JDBC.openConnection();
@@ -256,6 +278,7 @@ public class AppointmentsDaoImpl {
         }
         return monthlySummaries;
     }
+
     public static ObservableList<Appointments> getAppointmentsByCustomer(int contactID) {
         ObservableList<Appointments> appointments = FXCollections.observableArrayList();
         String sql = "SELECT * FROM appointments WHERE Contact_ID = ?";

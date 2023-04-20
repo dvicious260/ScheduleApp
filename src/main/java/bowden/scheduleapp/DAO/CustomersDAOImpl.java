@@ -38,9 +38,10 @@ public class CustomersDAOImpl {
                 Customer customer = new Customer(customerID, customerName, customerAddress, customerPostal, customerPhone, customerDivisionID, division);
                 allCustomers.add(customer);
             }
-        }catch (SQLException throwables){
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }return allCustomers;
+        }
+        return allCustomers;
     }
 
 
@@ -98,14 +99,6 @@ public class CustomersDAOImpl {
     }
 
 
-    /*public static boolean deleteCustomer(int customerId) throws SQLException {
-        String sql = "DELETE FROM customers WHERE Customer_ID = ?";
-        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1, customerId);
-        int rowsDeleted = ps.executeUpdate();
-        return rowsDeleted > 0;
-    }*/
-
     public static boolean deleteCustomer(int customerId) throws SQLException {
         // check if customer has associated appointments
         boolean hasAppointments = checkAppointments(customerId);
@@ -156,6 +149,7 @@ public class CustomersDAOImpl {
         }
         return maxId;
     }
+
     public List<CountryStats> getCountryStats() throws SQLException {
         Connection conn = JDBC.openConnection();
         List<CountryStats> countryStatistics = new ArrayList<>();

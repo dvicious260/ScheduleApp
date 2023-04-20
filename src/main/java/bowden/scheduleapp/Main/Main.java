@@ -23,13 +23,10 @@ import static bowden.scheduleapp.DAO.CustomersDAOImpl.deleteCustomer;
 import static bowden.scheduleapp.DAO.CustomersDAOImpl.getCustomer;
 
 
-
-
-
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/Reports.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Scheduling App");
         stage.setScene(scene);

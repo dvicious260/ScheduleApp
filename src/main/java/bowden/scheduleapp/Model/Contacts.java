@@ -10,8 +10,9 @@ public class Contacts {
         this.contactName = contactName;
         this.contactEmail = contactEmail;
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return contactName;
     }
 

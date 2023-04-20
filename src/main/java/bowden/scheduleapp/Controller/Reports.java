@@ -20,11 +20,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static bowden.scheduleapp.DAO.AppointmentsDaoImpl.getAppointmentsByCustomer;
+import static bowden.scheduleapp.Helper.Methods.home;
 
 public class Reports {
 
@@ -53,7 +55,7 @@ public class Reports {
     private TableColumn<Appointments, LocalDateTime> columnEnd;
 
     @FXML
-    private TableColumn<?, ?> columnID;
+    private TableColumn<Appointments, Integer> columnID;
 
     @FXML
     private TableColumn<Appointments, String> columnLocation;
@@ -83,7 +85,8 @@ public class Reports {
     private TableView<CountryStats> customerCountry;
 
     @FXML
-    void back(ActionEvent event) {
+    void back(ActionEvent event) throws IOException {
+        home(event);
 
     }
 
@@ -103,7 +106,7 @@ public class Reports {
 
             // populate the combo box with contacts
             ContactsDaoImpl contactsDao = new ContactsDaoImpl();
-            ObservableList<Contacts> contacts = FXCollections.observableArrayList(contactsDao.getAllContacts());
+            ObservableList<Contacts> contacts = FXCollections.observableArrayList(ContactsDaoImpl.getAllContacts());
             comboContacts.setItems(contacts);
 
         } catch (SQLException e) {
@@ -112,7 +115,28 @@ public class Reports {
 
         ObservableList<Appointments> appointmentsList = FXCollections.observableArrayList();
 
-        comboContacts.setValue(comboContacts.getItems().get(1));
+        // set a default value for the combo box and load appointments for the selected contact
+        if (comboContacts.getItems().size() > 0) {
+            comboContacts.setValue(comboContacts.getItems().get(0));
+            Contacts selectedContact = comboContacts.getValue();
+            int contactID = selectedContact.getContactID();
+            ObservableList<Appointments> appointments = getAppointmentsByCustomer(contactID);
+            appointmentsList.setAll(appointments);
+        }
+
+        // set the cell value factories for each column
+        columnID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        columnStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        columnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        columnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        columnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+
+        // set the items of the appointments table view with the list of appointments
+        appointmentsContact.setItems(appointmentsList);
+
         // Add an event handler to the combo box to update the table view
         comboContacts.setOnAction(event -> {
             // Get the selected customer
@@ -120,20 +144,9 @@ public class Reports {
             int contactID = selectedContact.getContactID();
 
             ObservableList<Appointments> appointments = getAppointmentsByCustomer(contactID);
-            System.out.println("Number of appointments retrieved: " + appointments.size());
 
             // Set the items of the table view to the list of appointments
             appointmentsList.setAll(appointments);
-
-            // set the cell value factories for each column
-            columnID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
-            columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-            columnType.setCellValueFactory(new PropertyValueFactory<>("type"));
-            columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-            columnStart.setCellValueFactory(new PropertyValueFactory<>("start"));
-            columnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
-            columnCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-            columnLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
 
             // set the items of the appointments table view with the list of appointments
             appointmentsContact.setItems(appointmentsList);
@@ -148,7 +161,7 @@ public class Reports {
         columnCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         columnCustomers.setCellValueFactory(new PropertyValueFactory<>("customerCount"));
 
-        // ...
     }
+
 }
 

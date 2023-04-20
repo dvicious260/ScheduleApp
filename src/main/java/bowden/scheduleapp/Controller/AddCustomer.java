@@ -77,7 +77,7 @@ public class AddCustomer implements Initializable {
         FirstLevelDivisions division = newCustomerState.getSelectionModel().getSelectedItem();
         int divisionID = division.getDivisionID();
 
-        Customer newCustomer = new Customer(id,customerName,customerAddress,customerPostal,customerPhone,divisionID,division);
+        Customer newCustomer = new Customer(id, customerName, customerAddress, customerPostal, customerPhone, divisionID, division);
         try {
             CustomersDAOImpl.insertCustomer(newCustomer);
         } catch (SQLException e) {
@@ -87,8 +87,9 @@ public class AddCustomer implements Initializable {
 
 
     }
+
     @FXML
-    void deleteCustomer(ActionEvent event) throws IOException{
+    void deleteCustomer(ActionEvent event) throws IOException {
 
     }
 
@@ -96,7 +97,7 @@ public class AddCustomer implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         newCustomerID.setDisable(true);
         try {
-            newCustomerID.setText(String.valueOf(CustomersDAOImpl.getMaxCustomerId()+1));
+            newCustomerID.setText(String.valueOf(CustomersDAOImpl.getMaxCustomerId() + 1));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

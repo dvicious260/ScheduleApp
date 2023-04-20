@@ -1,9 +1,9 @@
 package bowden.scheduleapp.Helper;
 
 public class MonthlySummary {
-    private String month;
-    private String appointmentType;
-    private int total;
+    private final String month;
+    private final String appointmentType;
+    private final int total;
 
     public MonthlySummary(String month, String appointmentType, int total) {
         this.month = month;

@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static bowden.scheduleapp.Helper.Methods.home;
+
 public class ModifyCustomer implements Initializable {
     @FXML
     private TextField modifyCustomerAddress;
@@ -106,7 +107,7 @@ public class ModifyCustomer implements Initializable {
         // set the selected country
         modifyCustomerCountry.setValue(customer.getCountry());
 
-        // set the selected country
+        // set the selected country using a lambda function to listen for changes in the combo box
         modifyCustomerCountry.getSelectionModel().selectedItemProperty().addListener((observableValue, oldCountry, newCountry) -> {
             // Populate the divisions combo box based on the selected country
             ObservableList<FirstLevelDivisions> divisions = DivisionsDaoImpl.getDivisionsByCountryId(newCountry.getCountryID());
@@ -131,7 +132,6 @@ public class ModifyCustomer implements Initializable {
         // set the selected division
         modifyCustomerState.getSelectionModel().select(customer.getDivision());
     }
-
 
 
     @Override

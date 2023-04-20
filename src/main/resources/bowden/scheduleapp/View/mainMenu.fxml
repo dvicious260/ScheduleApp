@@ -37,6 +37,14 @@
                      </HBox.margin>
                   </RadioButton>
                   <RadioButton fx:id="rbuttonViewWeek" mnemonicParsing="false" onAction="#viewWeek" text="View by Week" toggleGroup="$viewGroup" />
+                  <Button fx:id="buttonReports" mnemonicParsing="false" onAction="#reports" text="Reports">
+                     <HBox.margin>
+                        <Insets left="360.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="Times New Roman" size="13.0" />
+                     </font>
+                  </Button>
                </children>
             </HBox>
             <TableView fx:id="appointmentTable" prefHeight="176.0" prefWidth="884.0">

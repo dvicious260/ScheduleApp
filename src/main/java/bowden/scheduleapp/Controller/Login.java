@@ -3,6 +3,7 @@ package bowden.scheduleapp.Controller;
 import bowden.scheduleapp.DAO.AppointmentsDaoImpl;
 import bowden.scheduleapp.DAO.LoginDaoImpl;
 import bowden.scheduleapp.Helper.JDBC;
+import bowden.scheduleapp.Helper.UserActivityLogger;
 import bowden.scheduleapp.Main.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -60,9 +62,11 @@ public class Login implements Initializable {
         String password = passwordText.getText();
 
         LoginDaoImpl loginDao = new LoginDaoImpl();
-        boolean loginSuccessful = loginDao.getLogin(username, password);
+        boolean loginSuccessful = LoginDaoImpl.getLogin(username, password);
 
-        if (loginSuccessful){
+        UserActivityLogger.logLoginAttempt(username, loginSuccessful); // log login attempt
+
+        if (loginSuccessful) {
             AppointmentsDaoImpl.checkUpcomingAppointments();
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/bowden/scheduleapp/View/mainMenu.fxml"));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -70,7 +74,7 @@ public class Login implements Initializable {
             stage.setScene(scene);
             stage.show();
 
-        }else{
+        } else {
             // Load the appropriate resource bundle for the alerts based on the user's locale
             ResourceBundle alertsBundle;
             if (Locale.getDefault().getLanguage().equals("fr")) {
@@ -86,6 +90,7 @@ public class Login implements Initializable {
         }
 
     }
+
 
     @FXML
     void quit(ActionEvent event) {

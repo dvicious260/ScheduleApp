@@ -13,7 +13,6 @@ import java.sql.SQLException;
 public class UserDaoImpl {
 
 
-
     public static boolean insertUser(Users user) throws SQLException {
         String sql = "INSERT INTO users (User_ID, User_Name, Password) VALUES (?,?,?)";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -63,7 +62,7 @@ public class UserDaoImpl {
         return rowsDeleted > 0;
     }
 
-    public static ObservableList<Users> getAllUsers(){
+    public static ObservableList<Users> getAllUsers() {
         ObservableList<Users> users = FXCollections.observableArrayList();
 
         try (Connection connection = JDBC.openConnection();
